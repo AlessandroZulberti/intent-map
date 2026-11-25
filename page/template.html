@@ -180,45 +180,62 @@ details.acc.mini>summary::before{border-color:var(--pre)}
 @media(max-width:900px){.top{grid-template-columns:minmax(0,1fr)}.stage{grid-template-columns:minmax(0,1fr);height:auto}.fig{height:70vw;min-height:360px}.key{order:2;flex-direction:row;flex-wrap:wrap;border-right:0;border-top:1px solid var(--rule)}.side{order:3;overflow:visible}.side{border-left:0;border-top:1px solid var(--rule)}.three{grid-template-columns:minmax(0,1fr)}.lens{grid-template-columns:minmax(0,1fr)}.lrow{grid-template-columns:minmax(0,1fr) auto}.lrow .tr{grid-column:1/-1;grid-row:2}.method{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){.fig{min-height:340px;height:80vw}.figs{gap:10px}.fig1 b{font-size:32px}table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;width:auto}.stack td::before{content:attr(data-l);color:var(--soft);font-size:13px;flex:none}}
 
+
+.dash{box-sizing:border-box;height:clamp(560px,calc(var(--vph,100vh) - 80px),1100px);display:grid;grid-template-rows:auto minmax(0,1fr);gap:14px;padding:16px max(2vw,16px) 18px}
+.dhead{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px 40px;align-items:end}
+.dash h1{font-size:clamp(26px,2.3vw,36px);max-width:none;margin:0 0 6px}
+.dash .lede{font-size:15px;margin:0 0 4px;max-width:80ch}
+.dash .brand{font-size:13px;margin:0;padding:0;border:0;color:var(--soft)}
+.dash .figs{grid-template-columns:repeat(3,minmax(140px,190px));gap:20px}
+.dash .fig1 b{font-size:clamp(24px,2vw,32px)}
+.dash .fig1 span{font-size:13px;margin-top:4px}
+.dash .stage{grid-template-columns:minmax(0,1fr) clamp(360px,28vw,460px);height:auto;min-height:0}
+.dash .side{gap:10px;padding:14px 16px}.dash .side>*{flex-shrink:0}
+.dash .ctrls button,.dash .key button{min-height:32px}
+.dash .ctrls{gap:6px}.dash .ctrls button{padding:4px 10px;font-size:13.5px}.dash .tools select{min-height:36px;padding-block:4px;font-size:15px}
+.dash .key{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:0;border:0;overflow:visible}
+.dash .key .lab{grid-column:1/-1;margin:0}
+.dash .key button{font-size:12.5px;padding:4px 8px;border-radius:8px;min-width:0}
+.dash .detail{padding-top:12px}
+.dash .detail q{font-size:16px;margin-bottom:8px}
+.dash .detail details summary{cursor:pointer;font-size:13px;color:var(--soft);margin-top:8px;min-height:24px}
+@media(max-width:900px){.dash{height:auto}.dhead{grid-template-columns:minmax(0,1fr)}.dash .figs{grid-template-columns:repeat(3,minmax(0,1fr))}.dash .stage{grid-template-columns:minmax(0,1fr)}.dash .fig{height:75vw;min-height:340px}.dash .key{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.dash .figs{grid-template-columns:minmax(0,1fr)}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 </style>
 </head>
 <body>
 <main>
-<section class="band" aria-labelledby="t">
- <div class="wrap">
-  <div class="top">
-   <div>
-    <h1 id="t">Shoppers ask about owning it before they buy it</h1>
-    <p class="lede">A service blueprint with a third direction. Journey stages run across, who answers runs down, and depth shows how well each customer need is answered. Needs the journey does not fully answer sit further forward, away from the lane that should have caught them.</p>
-    <p class="brand"><b>Example: Larkhob</b>, a premium kitchen brand selling cookware, coffee and tea, small appliances, and care products. Larkhob is a fictional brand created for this example. Its products, customers and questions are invented.</p>
-   </div>
-   <div class="figs" id="figs"></div>
+<section class="dash" aria-labelledby="t">
+ <div class="dhead">
+  <div class="dtitle">
+   <h1 id="t">Shoppers ask about owning it before they buy it</h1>
+   <p class="lede">A service blueprint with a third direction. Journey stages run across, who answers runs down, and depth shows how well each customer need is answered.</p>
+   <p class="brand"><b>Example: Larkhob</b>, a fictional premium kitchen brand. Its products, customers and questions are invented.</p>
   </div>
-  <div class="stage">
-   <div class="key" id="key" role="group" aria-label="Legend: select an item to show or hide it"></div>
-   <div class="fig" id="fig">
-    <a class="skip" href="#tb">Skip the map: every need is in the table</a>
-    <canvas id="cv" tabindex="0" role="img" aria-describedby="cvhelp"></canvas>
+  <div class="figs" id="figs"></div>
+ </div>
+ <div class="stage">
+  <div class="fig" id="fig">
+   <a class="skip" href="#tb">Skip the map: every need is in the table</a>
+   <canvas id="cv" tabindex="0" role="img" aria-describedby="cvhelp"></canvas>
+  </div>
+  <div class="side">
+   <div class="ctrls" role="group" aria-label="Arrangement">
+    <button type="button" id="bBlue" aria-pressed="true">As a blueprint</button>
+    <button type="button" id="bMean" aria-pressed="false">By meaning</button>
+    <button type="button" id="bSpin" aria-pressed="true">Rotate</button>
+    <button type="button" id="bReset">Reset view</button>
    </div>
-   <div class="side">
-    <div class="ctrls" role="group" aria-label="Arrangement">
-     <button type="button" id="bBlue" aria-pressed="true">As a blueprint</button>
-     <button type="button" id="bMean" aria-pressed="false">By meaning</button>
-    </div>
-    <div class="ctrls" role="group" aria-label="Layers">
-     <button type="button" id="bNeeds" aria-pressed="true">Needs</button>
-     <button type="button" id="bSteps" aria-pressed="true">Steps</button>
-     <button type="button" id="bGap" class="gapbtn" aria-pressed="false">Gaps only</button>
-    </div>
-    <div class="tools" style="margin:0"><label for="cby" class="hint">Colour by</label><select id="cby"><option value="stage">Journey stage</option><option value="cat">Product category</option><option value="acc">Accessibility layer</option><option value="shop">NN/g shopper type</option><option value="ai">NN/g AI conversation type</option><option value="tier">Price tier</option><option value="dg">Agent delegation</option><option value="src">Where the answer lives</option></select></div>
-    <div class="ctrls">
-     <button type="button" id="bSpin" aria-pressed="true">Rotate</button>
-     <button type="button" id="bReset">Reset view</button>
-    </div>
-    <details class="howto"><summary>How to use the map</summary><p class="hint" id="cvhelp">As a blueprint, turn the map sideways to see depth. By meaning, points close together say similar things. Drag to turn the map, or focus it and use the arrow keys. Select a point to see where it lands. Every point is also in the table below.</p></details>
-    <div class="detail" id="detail" aria-live="polite"></div>
+   <div class="ctrls" role="group" aria-label="Layers">
+    <button type="button" id="bNeeds" aria-pressed="true">Needs</button>
+    <button type="button" id="bSteps" aria-pressed="true">Steps</button>
+    <button type="button" id="bGap" class="gapbtn" aria-pressed="false">Gaps only</button>
    </div>
+   <div class="tools" style="margin:0"><label for="cby" class="hint">Colour by</label><select id="cby"><option value="stage">Journey stage</option><option value="cat">Product category</option><option value="acc">Accessibility layer</option><option value="shop">NN/g shopper type</option><option value="ai">NN/g AI conversation type</option><option value="tier">Price tier</option><option value="dg">Agent delegation</option><option value="src">Where the answer lives</option></select></div>
+   <div class="key" id="key" role="group" aria-label="Filter the map"></div>
+   <details class="howto"><summary>How to use the map</summary><p class="hint" id="cvhelp">As a blueprint, turn the map sideways to see depth. By meaning, points close together say similar things. Drag to turn the map, or focus it and use the arrow keys. Select a point to see where it lands. Every point is also in the table below.</p></details>
+   <div class="detail" id="detail" aria-live="polite"></div>
   </div>
  </div>
 </section>
@@ -497,7 +514,7 @@ function detail(){
  const el=document.getElementById('detail'),q=sel;
  if(!q){el.innerHTML='<div class="kind">Nothing selected</div><p class="hint">Select a point, or a row in the lists below.</p>';return}
  if(q.k==='need'){const n=q.o,s=D.steps[n.step];
-  el.innerHTML='<div class="kind">'+stageDot(n.stage)+'Shopper need, '+esc(SL[n.stage].toLowerCase())+'</div><q>'+esc(n.t)+'</q><dl><dt>Journey step</dt><dd>'+(n.gap?'<b>No step answers this</b>':(n.partly?'Partly: ':'')+stageDot(s.stage)+esc(s.t))+'</dd>'+(n.missing?'<dt>Missing step</dt><dd>'+esc(n.missing)+'</dd>':'')+(n.needs_to_know?'<dt>Needs to know</dt><dd>'+esc(n.needs_to_know)+'</dd>':'')+(n.reason?'<dt>'+(n.by==='researcher'?'Researcher':'Model')+'</dt><dd>'+esc(n.reason)+'</dd>':'')+'<dt>Closeness</dt><dd>'+n.sim.toFixed(2)+(n.gap?' <span class="flag">Unanswered</span>':n.partly?' <span class="flag">Partly answered</span>':'')+'</dd><dt>Category</dt><dd>'+esc(CAT[n.cat].n)+'</dd><dt>Access</dt><dd>'+esc(ACC[n.acc].n)+'</dd><dt>Shopper type</dt><dd>'+esc(SHOP[n.shop].n)+'</dd><dt>With an AI</dt><dd>'+esc(AI[n.ai].n)+', '+esc(AI[n.ai].d)+'</dd><dt>Tier</dt><dd>'+esc(TIER[n.tier].n)+'</dd><dt>Agent</dt><dd>'+esc(DG[n.dg].n)+'</dd><dt>Answer lives</dt><dd>'+esc(SRC[n.src].n)+'</dd></dl>'}
+  el.innerHTML='<div class="kind">'+stageDot(n.stage)+'Shopper need, '+esc(SL[n.stage].toLowerCase())+'</div><q>'+esc(n.t)+'</q><dl><dt>Journey step</dt><dd>'+(n.gap?'<b>No step answers this</b>':(n.partly?'Partly: ':'')+stageDot(s.stage)+esc(s.t))+'</dd>'+(n.missing?'<dt>Missing step</dt><dd>'+esc(n.missing)+'</dd>':'')+(n.needs_to_know?'<dt>Needs to know</dt><dd>'+esc(n.needs_to_know)+'</dd>':'')+(n.reason?'<dt>'+(n.by==='researcher'?'Researcher':'Model')+'</dt><dd>'+esc(n.reason)+'</dd>':'')+'<dt>Closeness</dt><dd>'+n.sim.toFixed(2)+(n.gap?' <span class="flag">Unanswered</span>':n.partly?' <span class="flag">Partly answered</span>':'')+'</dd></dl><details><summary>Coding: category, shopper type, AI, tier</summary><dl><dt>Category</dt><dd>'+esc(CAT[n.cat].n)+'</dd><dt>Access</dt><dd>'+esc(ACC[n.acc].n)+'</dd><dt>Shopper type</dt><dd>'+esc(SHOP[n.shop].n)+'</dd><dt>With an AI</dt><dd>'+esc(AI[n.ai].n)+', '+esc(AI[n.ai].d)+'</dd><dt>Tier</dt><dd>'+esc(TIER[n.tier].n)+'</dd><dt>Agent</dt><dd>'+esc(DG[n.dg].n)+'</dd><dt>Answer lives</dt><dd>'+esc(SRC[n.src].n)+'</dd></dl></details>'}
  else if(q.k==='step'){const s=q.o;
   el.innerHTML='<div class="kind">'+stageDot(s.stage)+'Journey step, '+esc(SL[s.stage].toLowerCase())+'</div><q>'+esc(s.t)+'</q><p class="hint">'+esc(s.d)+'</p><dl><dt>Closest match for</dt><dd>'+s.n+(s.n===1?' need':' needs')+'</dd><dt>Built for</dt><dd>'+(s.shop?esc(SHOP[s.shop].n):'Owners, after purchase')+'</dd></dl>'+(()=>{const ns=D.needs.map((n,i)=>[n,i]).filter(([n])=>n.step===q.i);return ns.length?'<p class="hint">Needs linked to this step. Select one to see it.</p><ul class="linked">'+ns.map(([n,i])=>'<li><button type="button" class="lk" data-i="'+i+'">'+(n.open?'<span class="flag">'+(n.gap?'Unanswered':'Partly')+'</span> ':'')+esc(n.t)+'</button></li>').join('')+'</ul>':''})()}
 }
