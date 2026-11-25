@@ -123,6 +123,7 @@ details summary:focus-visible{outline:3px solid var(--pre);outline-offset:2px}
 .tablist [role=tab][aria-selected=true]{color:var(--ink);border-bottom-color:var(--pre);font-weight:600}
 .tablist [role=tab]:hover{color:var(--ink)}
 .tablist [role=tab]:focus-visible{outline:3px solid var(--pre);outline-offset:-3px}
+details.fold{padding-block:4px}details.fold>summary{cursor:pointer}details.fold>summary h2{display:inline;margin:0;font-size:clamp(1.25rem,2vw,1.5rem)}details.fold>.wrap{padding-top:12px}
 .tabpanel:focus-visible{outline:3px solid var(--pre);outline-offset:4px}
 .psec{padding:28px 0;border-bottom:1px solid var(--rule)}
 .psec:last-child{border-bottom:0}
@@ -217,14 +218,35 @@ details.acc.mini>summary::before{border-color:var(--pre)}
  </div>
 </section>
 
+<section class="band actband" aria-labelledby="act">
+ <div class="wrap">
+  <h2 id="act">What to do about it</h2>
+  <p class="lede" id="actlede"></p>
+  <div class="rule3">
+   <div><b class="sev c">Critical</b><span>Unanswered, and either an AI agent would act on it anyway, or it is an access need. These fail silently, or shut someone out.</span></div>
+   <div><b class="sev h">High</b><span>Unanswered, and the answer lives outside the brand, or partly outside it. Someone else becomes the authority on your product.</span></div>
+   <div><b class="sev m">Medium</b><span>Unanswered, but the brand holds the answer and the shopper keeps the decision. A need that is only partly answered drops one level.</span></div>
+  </div>
+  <div class="tools"><button type="button" id="copyAct">Copy the action list</button><span class="hint" id="copyMsg" role="status"></span><label for="fLev" class="hint">Level</label><select id="fLev"><option value="ch">Critical and high</option><option value="c">Critical only</option><option value="">All levels</option></select><label for="fOwn" class="hint">Owner</label><select id="fOwn"><option value="">All owners</option></select></div>
+  <div class="scroll"><table class="stack"><thead><tr><th scope="col">Level</th><th scope="col">Customer need</th><th scope="col">Owner</th><th scope="col">Action</th><th scope="col">Why</th><th scope="col">Missing step</th></tr></thead><tbody id="actRows"></tbody></table></div>
+  <p class="sample">Levels come from the coding, not from how often each question is asked. A company should weight them with its own volumes: site search, contact reasons, chat transcripts. A frequent Medium can matter more than a rare Critical.</p>
+ </div>
+</section>
+
+<section class="band msband" aria-labelledby="ms">
+ <div class="wrap">
+  <h2 id="ms">Seven steps to add to the journey</h2>
+  <p class="lede">Most open needs share a missing step. Adding these seven answers them at the source. Each lists the needs it would close.</p>
+  <div id="missing" class="three"></div>
+ </div>
+</section>
+
 <section class="band tabsband" aria-label="Explore the results">
  <div class="wrap">
   <div class="tablist" role="tablist" aria-label="Explore the results">
-   <button type="button" role="tab" id="tab-findings" aria-controls="panel-findings" aria-selected="true" tabindex="0">Findings</button>
-   <button type="button" role="tab" id="tab-actions" aria-controls="panel-actions" aria-selected="false" tabindex="-1">What to do</button>
-   <button type="button" role="tab" id="tab-method" aria-controls="panel-method" aria-selected="false" tabindex="-1">Check the method</button>
-   <button type="button" role="tab" id="tab-needs" aria-controls="panel-needs" aria-selected="false" tabindex="-1">All needs</button>
-   <button type="button" role="tab" id="tab-how" aria-controls="panel-how" aria-selected="false" tabindex="-1">How it works</button>
+   <button type="button" role="tab" id="tab-findings" aria-controls="panel-findings" aria-selected="true" tabindex="0">Why it happens</button>
+   <button type="button" role="tab" id="tab-needs" aria-controls="panel-needs" aria-selected="false" tabindex="-1">Every need</button>
+   <button type="button" role="tab" id="tab-how" aria-controls="panel-how" aria-selected="false" tabindex="-1">How it was made</button>
   </div>
   <div class="tabpanel" role="tabpanel" id="panel-findings" aria-labelledby="tab-findings" tabindex="0">
 <div class="psec" aria-labelledby="f">
@@ -256,33 +278,53 @@ details.acc.mini>summary::before{border-color:var(--pre)}
  </div>
 </div>
   </div>
-  <div class="tabpanel" role="tabpanel" id="panel-actions" aria-labelledby="tab-actions" tabindex="0" hidden>
-<div class="psec" aria-labelledby="ms">
+  <div class="tabpanel" role="tabpanel" id="panel-needs" aria-labelledby="tab-needs" tabindex="0" hidden>
+<div class="psec" aria-labelledby="tb">
  <div class="wrap">
-  <h2 id="ms">Steps the journey is missing</h2>
-  <p class="lede">For every need not fully answered, the model named the step that was missing. A researcher grouped its suggestions into seven proposed additions to the blueprint. Each lists the needs it would answer and the model&rsquo;s own wording.</p>
-  <div id="missing" class="three"></div>
- </div>
-</div>
-<div class="psec" aria-labelledby="act">
- <div class="wrap">
-  <h2 id="act">What to do about it</h2>
-  <p class="lede" id="actlede"></p>
-  <div class="rule3">
-   <div><b class="sev c">Critical</b><span>Unanswered, and either an AI agent would act on it anyway, or it is an access need. These fail silently, or shut someone out.</span></div>
-   <div><b class="sev h">High</b><span>Unanswered, and the answer lives outside the brand, or partly outside it. Someone else becomes the authority on your product.</span></div>
-   <div><b class="sev m">Medium</b><span>Unanswered, but the brand holds the answer and the shopper keeps the decision. A need that is only partly answered drops one level.</span></div>
+  <h2 id="tb">Every need, as a table</h2>
+  <p class="lede">The same data as the map, for reading, sorting and screen readers.</p>
+  <div class="tools">
+   <label for="q" class="hint">Filter</label><input id="q" type="search" placeholder="Try: access, kettle, delivery, researcher" aria-describedby="qcount">
+   <label for="st" class="hint">Stage</label><select id="st"><option value="">All stages</option><option value="pre">Pre-purchase</option><option value="during">During</option><option value="post">Post-purchase</option></select>
+   <label for="so" class="hint">Sort</label><select id="so"><option value="sim">Least answered first</option><option value="stage">By stage</option><option value="step">By closest step</option></select>
   </div>
-  <div class="tools"><button type="button" id="copyAct">Copy the action list</button><span class="hint" id="copyMsg" role="status"></span><label for="fLev" class="hint">Level</label><select id="fLev"><option value="ch">Critical and high</option><option value="c">Critical only</option><option value="">All levels</option></select><label for="fOwn" class="hint">Owner</label><select id="fOwn"><option value="">All owners</option></select></div>
-  <div class="scroll"><table class="stack"><thead><tr><th scope="col">Level</th><th scope="col">Customer need</th><th scope="col">Owner</th><th scope="col">Action</th><th scope="col">Why</th><th scope="col">Missing step</th></tr></thead><tbody id="actRows"></tbody></table></div>
-  <p class="sample">Levels come from the coding, not from how often each question is asked. A company should weight them with its own volumes: site search, contact reasons, chat transcripts. A frequent Medium can matter more than a rare Critical.</p>
+  <p class="hint" id="qcount" role="status" aria-live="polite"></p>
+  <div class="scroll"><table class="stack"><thead><tr><th scope="col">Shopper need</th><th scope="col">Stage</th><th scope="col">Category</th><th scope="col">Access</th><th scope="col">Shopper type</th><th scope="col">AI conversation</th><th scope="col">Tier</th><th scope="col">Agent</th><th scope="col">Answer lives</th><th scope="col">Journey step that answers it</th><th scope="col">Closeness</th></tr></thead><tbody id="rows"></tbody></table></div>
+  <p class="sample">Larkhob and its customer needs are invented for this example.</p>
  </div>
 </div>
   </div>
-  <div class="tabpanel" role="tabpanel" id="panel-method" aria-labelledby="tab-method" tabindex="0" hidden>
-<div class="psec" aria-labelledby="cal">
+
+  <div class="tabpanel" role="tabpanel" id="panel-how" aria-labelledby="tab-how" tabindex="0" hidden>
+<p class="lede">How the map was built and how far to trust it. Open what you need.</p>
+<details class="psec acc fold"><summary><h2 id="bp">How to read the map</h2></summary>
  <div class="wrap">
-  <h2 id="cal">Check the judge</h2>
+  <div class="method">
+   <div><h3>Across: time</h3><p>Pre-purchase, during and post-purchase, step by step, as in any service blueprint.</p></div>
+   <div><h3>Down: who answers</h3><p>The journey steps sit on top. Under them, each need sits in the lane that holds its answer: the brand, the brand with outside judgement, or outside the brand altogether.</p></div>
+   <div><h3>Depth: coverage</h3><p>A blueprint shows what the company does. Depth shows how close each need gets to a step that answers it. The further a need floats, the more the journey misses it, and its lane says who owns the fix.</p></div>
+   <div><h3>A new line: the line of authority</h3><p>Blueprints separate what customers see from what they don&rsquo;t with a line of visibility. This map adds a line of authority, between answers the brand owns and answers that live elsewhere. When an AI assistant goes looking, that line decides whether the brand is the source or one voice among many. Placing needs in lanes is a researcher&rsquo;s judgement; the model only measures closeness.</p></div>
+  </div>
+ </div>
+</details>
+<details class="psec acc fold"><summary><h2 id="m">How the map is made</h2></summary>
+ <div class="wrap">
+  <div class="method">
+   <div><h3>Two layers</h3><p>101 customer needs written for Larkhob across its four categories, in the way people ask: with constraints, context and doubt. 37 blueprint steps across pre-, during- and post-purchase, worded as a shopper would say them.</p></div>
+   <div><h3>One space</h3><p>Each text is turned into a 768-number embedding with EmbeddingGemma, Google&rsquo;s open embedding model, run locally through Ollama: no data leaves the machine and nothing is paid for. Closeness is cosine similarity. The 3D layout comes from t-SNE, which keeps neighbours together but bends long distances, so read clusters, not exact positions.</p></div>
+   <div><h3>What counts as unanswered</h3><p>Closeness alone measures resemblance, not whether a step answers a need, so each need is judged twice. EmbeddingGemma shortlists the five steps nearest to it, with each step described by the questions it is there to answer. Then Gemma 3, a small language model also run locally, reads the need and the shortlist and decides: a step answers it, a step partly answers it, or none does. It gives a one-line reason and, where nothing fits, names the step the journey is missing. Both are the model&rsquo;s judgement, shown as such; a researcher can override any call.</p></div>
+   <div><h3>NN/g lenses</h3><p>Shopper types come from <a href="https://www.nngroup.com/articles/ecommerce-shoppers/">NN/g&rsquo;s five types of ecommerce shoppers</a>: product-focused, browsers, researchers, bargain hunters and one-time shoppers. They describe a shopping visit, so a sixth, Owner, is added for people caring for something they already have and value. Conversation types come from <a href="https://www.nngroup.com/articles/AI-conversation-types/">NN/g&rsquo;s six types of conversations with generative AI</a>: search query, funneling, exploring, chiseling, expanding and pinpointing. The coding of each need is a researcher&rsquo;s judgement, not NN/g&rsquo;s, and a second coder would test it.</p></div>
+   <div><h3>Price tier and delegation</h3><p>Each need is also coded by price tier, from mass through premium to luxury, and by what a shopper would let an agent do with it: act on it, help research it, or leave it alone. The delegation coding follows one argument: people hand over purchases that are replaceable and keep the ones that say something about them. Both are a researcher&rsquo;s coding.</p></div>
+   <div><h3>Accessibility layers</h3><p>Access needs are coded in three layers: digital (the website, checkout and documents online), product (the item itself, its controls and instructions), and service and place (the shop, delivery, customer service and information in other formats). Everything else is coded as not about access, for comparison. This is a researcher&rsquo;s coding.</p></div>
+   <div><h3>Levels, owners and actions</h3><p>Every unanswered need gets a level, an owner and a first action, by fixed rules shown with the action list. Access needs and needs an agent would act on are critical; answers that live outside the brand are high; the rest are medium. Owners follow the lane: digital access to the web team, product access to product design, service access to customer experience, outside answers to content and partnerships. The levels come from coding, not from volume, and a company should weight them with its own data.</p></div>
+   <div><h3>Where the answer lives</h3><p>Each need is also coded by where a good answer comes from: the brand&rsquo;s own pages, outside sources such as reviews, specialists and regulators, or both. An AI assistant goes wherever the best answer is, so needs answered outside the brand are where the brand stops being the authority on its own product. This is a researcher&rsquo;s coding too.</p></div>
+   <div><h3>About Larkhob</h3><p>Larkhob is a fictional kitchen brand, made up to show the method. Its four categories, the journey steps and every customer need on this page are written for the example, not collected from real customers or taken from any company. Any resemblance to an existing brand, product or business is unintended. If you believe the name or content matches an existing brand, please <a href="https://alessandrozulberti.com/contact/">get in touch</a> and it will be changed.</p></div>
+   <div><h3>Next version</h3><p>Swap the written needs for real queries, from E-GEO or anonymised site search, and the steps for a real blueprint. E-GEO's query text comes from Reddit and carries Reddit's terms, so publish clusters and counts rather than the queries themselves.</p></div>
+  </div>
+ </div>
+</details>
+<details class="psec acc fold"><summary><h2 id="cal">Check the judge</h2></summary>
+ <div class="wrap">
   <p class="lede">The model&rsquo;s calls are a first pass. Code these ten yourself: read the need and the step, give your verdict, then see the model&rsquo;s. Where you disagree, your call becomes an override.</p>
   <div class="calgrid">
    <div id="calList"></div>
@@ -300,61 +342,14 @@ details.acc.mini>summary::before{border-color:var(--pre)}
    </div>
   </div>
  </div>
-</div>
-<div class="psec" aria-labelledby="tw">
+</details>
+<details class="psec acc fold"><summary><h2 id="tw">Twins against the researcher</h2></summary>
  <div class="wrap">
-  <h2 id="tw">Twins against the researcher</h2>
   <p class="lede">Thirty of the needs were put to digital twins of real US shoppers on ExploraTwin, the Columbia Business School Digital Twins Lab&rsquo;s platform, using the Open e-commerce 1.0 panel. Each twin said where it would look first for an answer, and what it would let an AI assistant do. The twins test the researcher&rsquo;s coding; they are not customers.</p>
   <div id="twin" class="twin"></div>
   <p class="sample">Digital twins agree with real people only weakly at the level of the individual (the lab reports an average correlation of 0.20), and their answers vary less than people&rsquo;s. Read the agreement as a check on the coding, not as evidence about shoppers. The panel is American; the wording was adapted for it.</p>
  </div>
-</div>
-  </div>
-  <div class="tabpanel" role="tabpanel" id="panel-needs" aria-labelledby="tab-needs" tabindex="0" hidden>
-<div class="psec" aria-labelledby="tb">
- <div class="wrap">
-  <h2 id="tb">Every need, as a table</h2>
-  <p class="lede">The same data as the map, for reading, sorting and screen readers.</p>
-  <div class="tools">
-   <label for="q" class="hint">Filter</label><input id="q" type="search" placeholder="Try: access, kettle, delivery, researcher" aria-describedby="qcount">
-   <label for="st" class="hint">Stage</label><select id="st"><option value="">All stages</option><option value="pre">Pre-purchase</option><option value="during">During</option><option value="post">Post-purchase</option></select>
-   <label for="so" class="hint">Sort</label><select id="so"><option value="sim">Least answered first</option><option value="stage">By stage</option><option value="step">By closest step</option></select>
-  </div>
-  <p class="hint" id="qcount" role="status" aria-live="polite"></p>
-  <div class="scroll"><table class="stack"><thead><tr><th scope="col">Shopper need</th><th scope="col">Stage</th><th scope="col">Category</th><th scope="col">Access</th><th scope="col">Shopper type</th><th scope="col">AI conversation</th><th scope="col">Tier</th><th scope="col">Agent</th><th scope="col">Answer lives</th><th scope="col">Journey step that answers it</th><th scope="col">Closeness</th></tr></thead><tbody id="rows"></tbody></table></div>
-  <p class="sample">Larkhob and its customer needs are invented for this example.</p>
- </div>
-</div>
-  </div>
-  <div class="tabpanel" role="tabpanel" id="panel-how" aria-labelledby="tab-how" tabindex="0" hidden>
-<div class="psec" aria-labelledby="bp">
- <div class="wrap">
-  <h2 id="bp">How to read the map</h2>
-  <div class="method">
-   <div><h3>Across: time</h3><p>Pre-purchase, during and post-purchase, step by step, as in any service blueprint.</p></div>
-   <div><h3>Down: who answers</h3><p>The journey steps sit on top. Under them, each need sits in the lane that holds its answer: the brand, the brand with outside judgement, or outside the brand altogether.</p></div>
-   <div><h3>Depth: coverage</h3><p>A blueprint shows what the company does. Depth shows how close each need gets to a step that answers it. The further a need floats, the more the journey misses it, and its lane says who owns the fix.</p></div>
-   <div><h3>A new line: the line of authority</h3><p>Blueprints separate what customers see from what they don&rsquo;t with a line of visibility. This map adds a line of authority, between answers the brand owns and answers that live elsewhere. When an AI assistant goes looking, that line decides whether the brand is the source or one voice among many. Placing needs in lanes is a researcher&rsquo;s judgement; the model only measures closeness.</p></div>
-  </div>
- </div>
-</div>
-<div class="psec" aria-labelledby="m">
- <div class="wrap">
-  <h2 id="m">How the map is made</h2>
-  <div class="method">
-   <div><h3>Two layers</h3><p>101 customer needs written for Larkhob across its four categories, in the way people ask: with constraints, context and doubt. 37 blueprint steps across pre-, during- and post-purchase, worded as a shopper would say them.</p></div>
-   <div><h3>One space</h3><p>Each text is turned into a 768-number embedding with EmbeddingGemma, Google&rsquo;s open embedding model, run locally through Ollama: no data leaves the machine and nothing is paid for. Closeness is cosine similarity. The 3D layout comes from t-SNE, which keeps neighbours together but bends long distances, so read clusters, not exact positions.</p></div>
-   <div><h3>What counts as unanswered</h3><p>Closeness alone measures resemblance, not whether a step answers a need, so each need is judged twice. EmbeddingGemma shortlists the five steps nearest to it, with each step described by the questions it is there to answer. Then Gemma 3, a small language model also run locally, reads the need and the shortlist and decides: a step answers it, a step partly answers it, or none does. It gives a one-line reason and, where nothing fits, names the step the journey is missing. Both are the model&rsquo;s judgement, shown as such; a researcher can override any call.</p></div>
-   <div><h3>NN/g lenses</h3><p>Shopper types come from <a href="https://www.nngroup.com/articles/ecommerce-shoppers/">NN/g&rsquo;s five types of ecommerce shoppers</a>: product-focused, browsers, researchers, bargain hunters and one-time shoppers. They describe a shopping visit, so a sixth, Owner, is added for people caring for something they already have and value. Conversation types come from <a href="https://www.nngroup.com/articles/AI-conversation-types/">NN/g&rsquo;s six types of conversations with generative AI</a>: search query, funneling, exploring, chiseling, expanding and pinpointing. The coding of each need is a researcher&rsquo;s judgement, not NN/g&rsquo;s, and a second coder would test it.</p></div>
-   <div><h3>Price tier and delegation</h3><p>Each need is also coded by price tier, from mass through premium to luxury, and by what a shopper would let an agent do with it: act on it, help research it, or leave it alone. The delegation coding follows one argument: people hand over purchases that are replaceable and keep the ones that say something about them. Both are a researcher&rsquo;s coding.</p></div>
-   <div><h3>Accessibility layers</h3><p>Access needs are coded in three layers: digital (the website, checkout and documents online), product (the item itself, its controls and instructions), and service and place (the shop, delivery, customer service and information in other formats). Everything else is coded as not about access, for comparison. This is a researcher&rsquo;s coding.</p></div>
-   <div><h3>Levels, owners and actions</h3><p>Every unanswered need gets a level, an owner and a first action, by fixed rules shown with the action list. Access needs and needs an agent would act on are critical; answers that live outside the brand are high; the rest are medium. Owners follow the lane: digital access to the web team, product access to product design, service access to customer experience, outside answers to content and partnerships. The levels come from coding, not from volume, and a company should weight them with its own data.</p></div>
-   <div><h3>Where the answer lives</h3><p>Each need is also coded by where a good answer comes from: the brand&rsquo;s own pages, outside sources such as reviews, specialists and regulators, or both. An AI assistant goes wherever the best answer is, so needs answered outside the brand are where the brand stops being the authority on its own product. This is a researcher&rsquo;s coding too.</p></div>
-   <div><h3>About Larkhob</h3><p>Larkhob is a fictional kitchen brand, made up to show the method. Its four categories, the journey steps and every customer need on this page are written for the example, not collected from real customers or taken from any company. Any resemblance to an existing brand, product or business is unintended. If you believe the name or content matches an existing brand, please <a href="https://alessandrozulberti.com/contact/">get in touch</a> and it will be changed.</p></div>
-   <div><h3>Next version</h3><p>Swap the written needs for real queries, from E-GEO or anonymised site search, and the steps for a real blueprint. E-GEO's query text comes from Reddit and carries Reddit's terms, so publish clusters and counts rather than the queries themselves.</p></div>
-  </div>
- </div>
-</div>
+</details>
   </div>
  </div>
 </section>
@@ -613,13 +608,14 @@ el.innerHTML=note+'<div class="tsum"><div><b>'+ag('src','src_r')+' of '+T.rows.l
 const keyEl=document.getElementById('key');keyEl.innerHTML=keyHTML();
 document.getElementById('cby').addEventListener('input',e=>{mode=e.target.value;keyEl.innerHTML=keyHTML();draw()});
 const ro=new ResizeObserver(size);ro.observe(cv);
+const goTo=el=>{const fr=(()=>{try{return window.self!==window.top}catch(e){return true}})();if(fr){try{parent.postMessage({intentMapScroll:Math.round(el.getBoundingClientRect().top+window.scrollY)},'*')}catch(e){}}else el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})};
 {const tabs=[...document.querySelectorAll('[role=tab]')],panels=tabs.map(x=>document.getElementById(x.getAttribute('aria-controls')));
  const show=(i,focus,push)=>{tabs.forEach((x,k)=>{const on=k===i;x.setAttribute('aria-selected',String(on));x.tabIndex=on?0:-1;panels[k].hidden=!on});
   if(focus)tabs[i].focus();if(push){try{history.replaceState(null,'','#'+tabs[i].id.slice(4))}catch(e){}}};
  tabs.forEach((x,i)=>{x.addEventListener('click',()=>show(i,false,true));
   x.addEventListener('keydown',e=>{const n=tabs.length;let j=null;if(e.key==='ArrowRight')j=(i+1)%n;else if(e.key==='ArrowLeft')j=(i-1+n)%n;else if(e.key==='Home')j=0;else if(e.key==='End')j=n-1;if(j!==null){e.preventDefault();show(j,true,true)}})});
  const route=h=>{if(!h)return false;const id=h.replace('#','');const ti=tabs.findIndex(x=>x.id==='tab-'+id);if(ti>=0){show(ti,false,false);return true}
-  const el=document.getElementById(id);if(!el)return false;const pi=panels.findIndex(p=>p.contains(el));if(pi>=0){show(pi,false,false);setTimeout(()=>el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'}),0);return true}return false};
+  const el=document.getElementById(id);if(!el)return false;const pi=panels.findIndex(p=>p.contains(el));if(pi>=0)show(pi,false,false);setTimeout(()=>goTo(el),0);return true};
  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(a&&route(a.getAttribute('href'))){e.preventDefault();const id=a.getAttribute('href').slice(1),el=document.getElementById(id);if(el){el.setAttribute('tabindex','-1');el.focus({preventScroll:true})}}});
  window.addEventListener('hashchange',()=>route(location.hash));route(location.hash);}
 {const framed=(()=>{try{return window.self!==window.top}catch(e){return true}})();
