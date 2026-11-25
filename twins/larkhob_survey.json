@@ -1,0 +1,371 @@
+{
+ "schema_version": "0.1",
+ "id": "larkhob_intent",
+ "title": "Larkhob: who answers, and would you let AI handle it?",
+ "language": "EN",
+ "description": "Larkhob is a fictional brand. Tests a researcher's coding of 30 customer needs against digital twins.",
+ "questions": [
+  {
+   "id": "intro",
+   "content": [
+    {
+     "type": "text",
+     "text": "Larkhob is a kitchen brand that sells cookware, coffee and tea equipment, small appliances, and care products such as descalers and spare parts. Imagine you are one of its customers. The next two questions list situations a customer might be in: before buying, while ordering, or after the product arrives. Answer each one as you personally would."
+    }
+   ]
+  },
+  {
+   "id": "source",
+   "export_name": "source",
+   "content": [
+    {
+     "type": "text",
+     "text": "For each situation, where would you look first for an answer you trust?"
+    }
+   ],
+   "response": {
+    "type": "matrix",
+    "mode": "per_row",
+    "rows": [
+     {
+      "id": "n01",
+      "label": "I'm moving into my first apartment with an induction cooktop. Which pans do I actually need to start with, and which can wait?"
+     },
+     {
+      "id": "n02",
+      "label": "Is this frying pan's coating PTFE-free? I've read worrying things about non-stick and I don't know what to believe."
+     },
+     {
+      "id": "n03",
+      "label": "Will the casserole fit in a standard oven with the lid on? I need the height including the knob."
+     },
+     {
+      "id": "n04",
+      "label": "Is the hand-hammered copper range worth three times the price of the stainless one, or is it just for show?"
+     },
+     {
+      "id": "n05",
+      "label": "I want my first espresso machine. I drink two flat whites a day and I've never steamed milk."
+     },
+     {
+      "id": "n06",
+      "label": "How much electricity does the machine use if I leave it on standby?"
+     },
+     {
+      "id": "n07",
+      "label": "I have arthritis. I need a kettle I can fill, lift and pour without much grip."
+     },
+     {
+      "id": "n08",
+      "label": "Is the toaster wide enough for sourdough slices?"
+     },
+     {
+      "id": "n09",
+      "label": "Which descaler is safe for this espresso machine? I don't want to void the warranty."
+     },
+     {
+      "id": "n10",
+      "label": "Is there a subscription for descaler and filters so I never run out?"
+     },
+     {
+      "id": "n11",
+      "label": "I need a wedding gift from their registry, under $100, that will still be in their kitchen in ten years."
+     },
+     {
+      "id": "n12",
+      "label": "I love the green enamel color. What else comes in it?"
+     },
+     {
+      "id": "n13",
+      "label": "Is the sale price on the casserole actually lower than usual?"
+     },
+     {
+      "id": "n14",
+      "label": "How long will it last? I want to buy one good set rather than replace cheap pans every two years."
+     },
+     {
+      "id": "n15",
+      "label": "Where is the cookware made and under what conditions?"
+     },
+     {
+      "id": "n16",
+      "label": "I want to send it straight to the couple with a gift note and no price inside."
+     },
+     {
+      "id": "n17",
+      "label": "Can I pay for the espresso machine in instalments without a credit check?"
+     },
+     {
+      "id": "n18",
+      "label": "Which delivery option is cheapest and still arrives before the weekend?"
+     },
+     {
+      "id": "n19",
+      "label": "Can I pick up from a store instead of having a heavy box left on the doorstep?"
+     },
+     {
+      "id": "n20",
+      "label": "The non-stick coating is wearing off after three months. Am I using the wrong utensils?"
+     },
+     {
+      "id": "n21",
+      "label": "How do I descale the machine without damaging it?"
+     },
+     {
+      "id": "n22",
+      "label": "My espresso tastes sour. Is it the beans, the grind or the machine?"
+     },
+     {
+      "id": "n23",
+      "label": "My grandmother left me her copper pans. Can they be re-tinned, and what would it cost?"
+     },
+     {
+      "id": "n24",
+      "label": "Time to reorder the water filters. Same ones as last time."
+     },
+     {
+      "id": "n25",
+      "label": "The kettle lid hinge has snapped. Is that covered?"
+     },
+     {
+      "id": "n26",
+      "label": "I want the same machine for my brother. I can't remember which model it was."
+     },
+     {
+      "id": "n27",
+      "label": "How do I dispose of an old toaster safely? Can it go in the trash?"
+     },
+     {
+      "id": "n28",
+      "label": "Is the 14-day return period from when I ordered or when it arrived?"
+     },
+     {
+      "id": "n29",
+      "label": "How often should I season the cast-iron pan, and with what oil?"
+     },
+     {
+      "id": "n30",
+      "label": "Can I use oat milk in the frother, or will it damage it?"
+     }
+    ],
+    "randomization": {
+     "order": "shuffle"
+    },
+    "row_response": {
+     "type": "choice",
+     "mode": "single",
+     "required": true,
+     "options": [
+      {
+       "id": "B",
+       "label": "Larkhob's own website or customer service"
+      },
+      {
+       "id": "X",
+       "label": "Reviews, forums or independent experts"
+      },
+      {
+       "id": "M",
+       "label": "Both, about equally"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "delegate",
+   "export_name": "delegate",
+   "content": [
+    {
+     "type": "text",
+     "text": "Now imagine you have an AI assistant that can search, compare and place orders for you. For each situation, what would you let it do?"
+    }
+   ],
+   "response": {
+    "type": "matrix",
+    "mode": "per_row",
+    "rows": [
+     {
+      "id": "n01",
+      "label": "I'm moving into my first apartment with an induction cooktop. Which pans do I actually need to start with, and which can wait?"
+     },
+     {
+      "id": "n02",
+      "label": "Is this frying pan's coating PTFE-free? I've read worrying things about non-stick and I don't know what to believe."
+     },
+     {
+      "id": "n03",
+      "label": "Will the casserole fit in a standard oven with the lid on? I need the height including the knob."
+     },
+     {
+      "id": "n04",
+      "label": "Is the hand-hammered copper range worth three times the price of the stainless one, or is it just for show?"
+     },
+     {
+      "id": "n05",
+      "label": "I want my first espresso machine. I drink two flat whites a day and I've never steamed milk."
+     },
+     {
+      "id": "n06",
+      "label": "How much electricity does the machine use if I leave it on standby?"
+     },
+     {
+      "id": "n07",
+      "label": "I have arthritis. I need a kettle I can fill, lift and pour without much grip."
+     },
+     {
+      "id": "n08",
+      "label": "Is the toaster wide enough for sourdough slices?"
+     },
+     {
+      "id": "n09",
+      "label": "Which descaler is safe for this espresso machine? I don't want to void the warranty."
+     },
+     {
+      "id": "n10",
+      "label": "Is there a subscription for descaler and filters so I never run out?"
+     },
+     {
+      "id": "n11",
+      "label": "I need a wedding gift from their registry, under $100, that will still be in their kitchen in ten years."
+     },
+     {
+      "id": "n12",
+      "label": "I love the green enamel color. What else comes in it?"
+     },
+     {
+      "id": "n13",
+      "label": "Is the sale price on the casserole actually lower than usual?"
+     },
+     {
+      "id": "n14",
+      "label": "How long will it last? I want to buy one good set rather than replace cheap pans every two years."
+     },
+     {
+      "id": "n15",
+      "label": "Where is the cookware made and under what conditions?"
+     },
+     {
+      "id": "n16",
+      "label": "I want to send it straight to the couple with a gift note and no price inside."
+     },
+     {
+      "id": "n17",
+      "label": "Can I pay for the espresso machine in instalments without a credit check?"
+     },
+     {
+      "id": "n18",
+      "label": "Which delivery option is cheapest and still arrives before the weekend?"
+     },
+     {
+      "id": "n19",
+      "label": "Can I pick up from a store instead of having a heavy box left on the doorstep?"
+     },
+     {
+      "id": "n20",
+      "label": "The non-stick coating is wearing off after three months. Am I using the wrong utensils?"
+     },
+     {
+      "id": "n21",
+      "label": "How do I descale the machine without damaging it?"
+     },
+     {
+      "id": "n22",
+      "label": "My espresso tastes sour. Is it the beans, the grind or the machine?"
+     },
+     {
+      "id": "n23",
+      "label": "My grandmother left me her copper pans. Can they be re-tinned, and what would it cost?"
+     },
+     {
+      "id": "n24",
+      "label": "Time to reorder the water filters. Same ones as last time."
+     },
+     {
+      "id": "n25",
+      "label": "The kettle lid hinge has snapped. Is that covered?"
+     },
+     {
+      "id": "n26",
+      "label": "I want the same machine for my brother. I can't remember which model it was."
+     },
+     {
+      "id": "n27",
+      "label": "How do I dispose of an old toaster safely? Can it go in the trash?"
+     },
+     {
+      "id": "n28",
+      "label": "Is the 14-day return period from when I ordered or when it arrived?"
+     },
+     {
+      "id": "n29",
+      "label": "How often should I season the cast-iron pan, and with what oil?"
+     },
+     {
+      "id": "n30",
+      "label": "Can I use oat milk in the frother, or will it damage it?"
+     }
+    ],
+    "randomization": {
+     "order": "shuffle"
+    },
+    "row_response": {
+     "type": "choice",
+     "mode": "single",
+     "required": true,
+     "options": [
+      {
+       "id": "A",
+       "label": "Let it handle it for me"
+      },
+      {
+       "id": "S",
+       "label": "Let it help me look into it, then decide myself"
+      },
+      {
+       "id": "K",
+       "label": "Deal with it myself, without the AI"
+      }
+     ]
+    }
+   }
+  }
+ ],
+ "blocks": [
+  {
+   "id": "intro_b",
+   "kind": "survey",
+   "questions": [
+    "intro"
+   ]
+  },
+  {
+   "id": "source_b",
+   "kind": "survey",
+   "questions": [
+    "source"
+   ]
+  },
+  {
+   "id": "delegate_b",
+   "kind": "survey",
+   "questions": [
+    "delegate"
+   ]
+  }
+ ],
+ "flow": [
+  {
+   "type": "show_block",
+   "block": "intro_b"
+  },
+  {
+   "type": "show_block",
+   "block": "source_b"
+  },
+  {
+   "type": "show_block",
+   "block": "delegate_b"
+  }
+ ]
+}

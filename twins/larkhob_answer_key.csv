@@ -1,0 +1,31 @@
+row,need_index,stage,category,text_uk,text_us,shopper_type,ai_conversation,tier,researcher_delegation,researcher_source
+n01,0,pre,C,"I'm moving into my first flat with an induction hob. Which pans do I actually need to start with, and which can wait?","I'm moving into my first apartment with an induction cooktop. Which pans do I actually need to start with, and which can wait?",R,F,P,S,M
+n02,1,pre,C,Is this frying pan's coating PTFE-free? I've read worrying things about non-stick and I don't know what to believe.,Is this frying pan's coating PTFE-free? I've read worrying things about non-stick and I don't know what to believe.,R,C,P,S,X
+n03,2,pre,C,Will the casserole fit in a standard oven with the lid on? I need the height including the knob.,Will the casserole fit in a standard oven with the lid on? I need the height including the knob.,P,S,P,A,B
+n04,9,pre,C,"Is the hand-hammered copper range worth three times the price of the stainless one, or is it just for show?","Is the hand-hammered copper range worth three times the price of the stainless one, or is it just for show?",R,C,L,K,X
+n05,10,pre,T,I want my first espresso machine. I drink two flat whites a day and I've never steamed milk.,I want my first espresso machine. I drink two flat whites a day and I've never steamed milk.,R,F,P,S,M
+n06,14,pre,T,How much electricity does the machine use if I leave it on standby?,How much electricity does the machine use if I leave it on standby?,R,S,P,S,X
+n07,17,pre,T,"I have arthritis. I need a kettle I can fill, lift and pour without much grip.","I have arthritis. I need a kettle I can fill, lift and pour without much grip.",R,N,P,S,X
+n08,22,pre,A,Is the toaster wide enough for sourdough slices?,Is the toaster wide enough for sourdough slices?,P,S,M,A,B
+n09,28,pre,K,Which descaler is safe for this espresso machine? I don't want to void the warranty.,Which descaler is safe for this espresso machine? I don't want to void the warranty.,P,S,M,A,B
+n10,31,pre,K,Is there a subscription for descaler and filters so I never run out?,Is there a subscription for descaler and filters so I never run out?,P,S,M,A,B
+n11,32,pre,G,"I need a wedding present from their list, under a hundred pounds, that will still be in their kitchen in ten years.","I need a wedding gift from their registry, under $100, that will still be in their kitchen in ten years.",O,F,P,S,M
+n12,36,pre,G,I love the green enamel colour. What else comes in it?,I love the green enamel color. What else comes in it?,B,C,L,K,B
+n13,38,pre,G,Is the sale price on the casserole actually lower than usual?,Is the sale price on the casserole actually lower than usual?,H,S,P,A,X
+n14,45,pre,G,How long will it last? I want to buy one good set rather than replace cheap pans every two years.,How long will it last? I want to buy one good set rather than replace cheap pans every two years.,R,C,P,K,X
+n15,46,pre,G,Where is the cookware made and under what conditions?,Where is the cookware made and under what conditions?,R,C,L,K,M
+n16,52,during,G,I want to send it straight to the couple with a gift note and no price inside.,I want to send it straight to the couple with a gift note and no price inside.,O,N,P,A,B
+n17,56,during,T,Can I pay for the espresso machine in instalments without a credit check?,Can I pay for the espresso machine in instalments without a credit check?,H,S,P,S,B
+n18,59,during,G,Which delivery option is cheapest and still arrives before the weekend?,Which delivery option is cheapest and still arrives before the weekend?,H,C,M,A,B
+n19,63,during,G,Can I collect from a shop instead of having a heavy box left on the doorstep?,Can I pick up from a store instead of having a heavy box left on the doorstep?,P,S,M,A,B
+n20,68,post,C,The non-stick coating is wearing off after three months. Am I using the wrong utensils?,The non-stick coating is wearing off after three months. Am I using the wrong utensils?,W,F,M,S,X
+n21,70,post,T,How do I descale the machine without damaging it?,How do I descale the machine without damaging it?,W,S,P,S,B
+n22,71,post,T,"My espresso tastes sour. Is it the beans, the grind or the machine?","My espresso tastes sour. Is it the beans, the grind or the machine?",W,F,P,S,X
+n23,73,post,C,"My grandmother left me her copper pans. Can they be re-tinned, and what would it cost?","My grandmother left me her copper pans. Can they be re-tinned, and what would it cost?",W,E,L,K,X
+n24,75,post,K,Time to reorder the water filters. Same ones as last time.,Time to reorder the water filters. Same ones as last time.,P,S,M,A,B
+n25,79,post,A,The kettle lid hinge has snapped. Is that covered?,The kettle lid hinge has snapped. Is that covered?,P,S,M,S,B
+n26,80,post,T,I want the same machine for my brother. I can't remember which model it was.,I want the same machine for my brother. I can't remember which model it was.,P,F,P,A,B
+n27,81,post,A,How do I dispose of an old toaster safely? Can it go in the bin?,How do I dispose of an old toaster safely? Can it go in the trash?,O,S,M,A,X
+n28,85,post,G,Is the 14-day return period from when I ordered or when it arrived?,Is the 14-day return period from when I ordered or when it arrived?,P,S,M,A,M
+n29,88,post,C,"How often should I season the cast-iron pan, and with what oil?","How often should I season the cast-iron pan, and with what oil?",W,S,P,S,M
+n30,93,post,T,"Can I use oat milk in the frother, or will it damage it?","Can I use oat milk in the frother, or will it damage it?",W,S,P,S,M
