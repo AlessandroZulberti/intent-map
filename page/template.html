@@ -33,12 +33,16 @@ p{margin:0 0 12px;max-width:68ch}
 .fig1 b{display:block;font-family:Newsreader,Georgia,serif;font-weight:300;font-size:clamp(28px,2.7vw,38px);line-height:1;white-space:nowrap}
 .fig1 span{display:block;color:var(--soft);font-size:14px;margin-top:6px}
 .stage{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:0;background:var(--deep);border:1px solid var(--rule);border-radius:6px;overflow:hidden}
-.fig{position:relative;min-height:560px;height:min(70vh,760px)}
+.fig{position:relative;min-height:560px;height:min(78vh,860px)}
+section[aria-labelledby="t"]>.wrap{max-width:1880px}
+section[aria-labelledby="t"] .top{max-width:1440px;margin-inline:auto}
 .skip{position:absolute;left:12px;top:12px;z-index:2;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:4px;transform:translateY(-200%)}
 .skip:focus{transform:none;outline:3px solid var(--pre)}
 .fig canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;outline:none}
 .fig canvas:focus-visible{box-shadow:inset 0 0 0 3px var(--pre)}
-.key{position:absolute;left:14px;bottom:12px;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--soft);pointer-events:none}
+.fig{display:flex;flex-direction:column}.fig canvas{position:relative!important;inset:auto!important;flex:1 1 auto;min-height:0;height:auto!important}
+.key{position:static;padding:8px 14px 12px;display:flex;flex-wrap:wrap;gap:6px 8px;font-size:13px;color:var(--soft)}.key button{all:unset;cursor:pointer;display:inline-flex;align-items:center;min-height:28px;padding:2px 10px;border-radius:14px;border:1px solid var(--rule);color:var(--ink);background:var(--deep)}.key button:hover{border-color:var(--line)}.key button:focus-visible{outline:3px solid var(--pre);outline-offset:2px}.key button[data-k][aria-pressed=false],.key button[data-t=step][aria-pressed=false]{opacity:.55;text-decoration:line-through}.key .lab{align-self:center;margin-right:4px}
+.linked{list-style:none;margin:0;padding:0;display:grid;gap:4px}.linked button{all:unset;cursor:pointer;display:block;padding:6px 8px;border-radius:4px;color:var(--ink);font-size:14px;line-height:1.4;min-height:24px}.linked button:hover{background:var(--soft-blue)}.linked button:focus-visible{outline:3px solid var(--pre);outline-offset:1px}
 .key i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
 .side{border-left:1px solid var(--rule);padding:18px;display:flex;flex-direction:column;gap:14px;background:var(--panel)}
 .ctrls{display:flex;flex-wrap:wrap;gap:8px}
@@ -174,7 +178,7 @@ details.acc.mini>summary::before{border-color:var(--pre)}
 .sample{font-size:13px;color:var(--soft);margin-top:10px}
 @media(max-width:900px){.top{grid-template-columns:minmax(0,1fr)}.stage{grid-template-columns:minmax(0,1fr)}.side{border-left:0;border-top:1px solid var(--rule)}.three{grid-template-columns:minmax(0,1fr)}.lens{grid-template-columns:minmax(0,1fr)}.lrow{grid-template-columns:minmax(0,1fr) auto}.lrow .tr{grid-column:1/-1;grid-row:2}.method{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){.fig{min-height:360px;height:70vw}.figs{gap:10px}.fig1 b{font-size:32px}table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;width:auto}.stack td::before{content:attr(data-l);color:var(--soft);font-size:13px;flex:none}}
-@media(max-width:600px){.key{display:none}}
+
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 </style>
 </head>
@@ -194,7 +198,7 @@ details.acc.mini>summary::before{border-color:var(--pre)}
    <div class="fig" id="fig">
     <a class="skip" href="#tb">Skip the map: every need is in the table</a>
     <canvas id="cv" tabindex="0" role="img" aria-describedby="cvhelp"></canvas>
-    <div class="key" id="key" aria-hidden="true"></div>
+    <div class="key" id="key" role="group" aria-label="Legend: select an item to show or hide it"></div>
    </div>
    <div class="side">
     <div class="ctrls" role="group" aria-label="Arrangement">
@@ -375,7 +379,9 @@ Object.keys(TIER).forEach((k,i)=>TIER[k].c=PAL[i]);Object.keys(DG).forEach((k,i)
 Object.keys(SHOP).forEach((k,i)=>SHOP[k].c=PAL[i]);Object.keys(AI).forEach((k,i)=>AI[k].c=PAL[i]);
 let mode='stage';
 function colourOf(q){if(mode==='stage')return C[q.o.stage];if(q.k==='step')return mode==='shop'&&q.o.shop?SHOP[q.o.shop].c:'#5d7a99';return({shop:SHOP,ai:AI,tier:TIER,dg:DG,src:SRC,cat:CAT,acc:ACC})[mode][q.o[mode]].c}
-function keyHTML(){const it=mode==='stage'?Object.keys(SL).map(k=>[C[k],SL[k]]):Object.values(({shop:SHOP,ai:AI,tier:TIER,dg:DG,src:SRC,cat:CAT,acc:ACC})[mode]).map(o=>[o.c,o.n]);return it.map(([c,n])=>'<span><i style="background:'+c+'"></i>'+esc(n)+'</span>').join('')+'<span><i style="background:transparent;box-shadow:0 0 0 2px var(--pink)"></i>Not fully answered</span><span>Ring: journey step</span>'}
+const off=new Set();
+function valOf(q){if(mode==='stage')return q.o.stage;return q.k==='need'?q.o[mode]:null}
+function keyHTML(){const it=mode==='stage'?Object.keys(SL).map(k=>[k,C[k],SL[k]]):Object.entries(({shop:SHOP,ai:AI,tier:TIER,dg:DG,src:SRC,cat:CAT,acc:ACC})[mode]).map(([k,o])=>[k,o.c,o.n]);return '<span class="lab">Show</span>'+it.map(([k,c,n])=>'<button type="button" data-k="'+esc(k)+'" aria-pressed="'+(!off.has(k))+'"><i style="background:'+c+'"></i>'+esc(n)+'</button>').join('')+'<button type="button" data-t="open" aria-pressed="'+gapOnly+'"><i style="background:transparent;box-shadow:0 0 0 2px var(--pink)"></i>Only not fully answered</button><button type="button" data-t="step" aria-pressed="'+show.step+'">Rings: journey steps</button>'}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pts=[];
 D.needs.forEach((n,i)=>pts.push({k:'need',i,p:n.p,c:C[n.stage],o:n}));
@@ -426,8 +432,8 @@ let arr=1,arrT=1,yaw=.14,pitch=-.12,spin=!reduce,show={need:true,step:true},gapO
 const bSpin=document.getElementById('bSpin');bSpin.setAttribute('aria-pressed',String(spin));
 function size(){const r=cv.getBoundingClientRect();dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);draw()}
 function pos(q){if(arr===0&&arrT===0)return q.p;if(arrT===1)return q.b;const t=arrT;return[0,1,2].map(i=>q.p[i]*(1-t)+q.b[i]*t)}
-function project(p){const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);let x=p[0]*cy-p[2]*sy,z=p[0]*sy+p[2]*cy;let y=p[1]*cp-z*sp;z=p[1]*sp+z*cp;const s=Math.min(W,H)*.41,f=3.2/(3.2+z);return[W/2+x*s*f,H/2-12+y*s*f,z,f]}
-function visible(q){if(!show[q.k])return false;if(gapOnly&&q.k==='need'&&!q.o.open)return false;return true}
+function project(p){const cy=Math.cos(yaw),sy=Math.sin(yaw),cp=Math.cos(pitch),sp=Math.sin(pitch);let x=p[0]*cy-p[2]*sy,z=p[0]*sy+p[2]*cy;let y=p[1]*cp-z*sp;z=p[1]*sp+z*cp;const s=Math.min(W*.4,H*.44),f=3.2/(3.2+z);return[W/2+x*s*f,H/2+14+y*s*f,z,f]}
+function visible(q){if(!show[q.k])return false;{const v=valOf(q);if(v!==null&&v!==undefined&&off.has(v))return false}if(gapOnly&&q.k==='need'&&!q.o.open)return false;return true}
 function linkOf(q){if(!q)return null;if(q.k==='need'&&!q.o.gap)return pts[D.needs.length+q.o.step];return null}
 function draw(){
  ctx.clearRect(0,0,W,H);
@@ -450,9 +456,10 @@ function draw(){
   if(on){ctx.globalAlpha=1;ctx.lineWidth=2;ctx.strokeStyle=C.ink;ctx.beginPath();ctx.arc(x,y,11*f,0,7);ctx.stroke()}
  }
  ctx.globalAlpha=1;ctx.font='13px "Hanken Grotesk",system-ui,sans-serif';ctx.lineJoin='round';
- const boxes=[[0,H-34,W,34]];const label=(txt,x,y,force,col)=>{const w=ctx.measureText(txt).width,bx=[x-2,y-12,w+4,17];if(!force&&boxes.some(b=>bx[0]<b[0]+b[2]&&b[0]<bx[0]+bx[2]&&bx[1]<b[1]+b[3]&&b[1]<bx[1]+bx[3]))return;boxes.push(bx);ctx.lineWidth=4;ctx.strokeStyle=C.bg;ctx.strokeText(txt,x,y);ctx.fillStyle=col||C.ink;ctx.fillText(txt,x,y)};
+ const boxes=[];const label=(txt,x,y,force,col)=>{const w=ctx.measureText(txt).width;const al=ctx.textAlign;let lx=al==='right'?x-w:al==='center'?x-w/2:x;const nx=Math.max(6,Math.min(W-w-6,lx));x+=nx-lx;lx=nx;const bx=[lx-2,y-12,w+4,17];if(!force&&boxes.some(b=>bx[0]<b[0]+b[2]&&b[0]<bx[0]+bx[2]&&bx[1]<b[1]+b[3]&&b[1]<bx[1]+bx[3]))return;boxes.push(bx);ctx.lineWidth=4;ctx.strokeStyle=C.bg;ctx.strokeText(txt,x,y);ctx.fillStyle=col||C.ink;ctx.fillText(txt,x,y)};
  bpLabels(label);meanNote(label);
   [act,lk].forEach(q=>{if(q&&visible(q)){const _f=1;const v=project(pos(q));const t=q.k==='need'?(q.o.t.length>46?q.o.t.slice(0,44)+'…':q.o.t):q.o.t;const tw=ctx.measureText(t).width;const lx=Math.max(6,Math.min(W-tw-6,v[0]+14+tw>W-8?v[0]-14-tw:v[0]+14));label(t,lx,v[1]+4,true)}});
+ if(act&&act.k==='step'){D.needs.forEach((n,i)=>{if(n.step!==act.i)return;const q=pts[i];if(!visible(q))return;const v=project(pos(q));const t=n.t.length>38?n.t.slice(0,36)+'…':n.t;label(t,v[0]+10,v[1]+4,false,C.soft)})}
  if(show.step&&W>=520)for(const {q,v} of proj){if(q.k==='step'&&v[2]<-.15&&q!==act&&q!==lk)label(q.o.t,v[0]+10,v[1]+4)}
 }
 function guides(){
@@ -485,8 +492,9 @@ function detail(){
  if(q.k==='need'){const n=q.o,s=D.steps[n.step];
   el.innerHTML='<div class="kind">'+stageDot(n.stage)+'Shopper need, '+esc(SL[n.stage].toLowerCase())+'</div><q>'+esc(n.t)+'</q><dl><dt>Journey step</dt><dd>'+(n.gap?'<b>No step answers this</b>':(n.partly?'Partly: ':'')+stageDot(s.stage)+esc(s.t))+'</dd>'+(n.missing?'<dt>Missing step</dt><dd>'+esc(n.missing)+'</dd>':'')+(n.needs_to_know?'<dt>Needs to know</dt><dd>'+esc(n.needs_to_know)+'</dd>':'')+(n.reason?'<dt>'+(n.by==='researcher'?'Researcher':'Model')+'</dt><dd>'+esc(n.reason)+'</dd>':'')+'<dt>Closeness</dt><dd>'+n.sim.toFixed(2)+(n.gap?' <span class="flag">Unanswered</span>':n.partly?' <span class="flag">Partly answered</span>':'')+'</dd><dt>Category</dt><dd>'+esc(CAT[n.cat].n)+'</dd><dt>Access</dt><dd>'+esc(ACC[n.acc].n)+'</dd><dt>Shopper type</dt><dd>'+esc(SHOP[n.shop].n)+'</dd><dt>With an AI</dt><dd>'+esc(AI[n.ai].n)+', '+esc(AI[n.ai].d)+'</dd><dt>Tier</dt><dd>'+esc(TIER[n.tier].n)+'</dd><dt>Agent</dt><dd>'+esc(DG[n.dg].n)+'</dd><dt>Answer lives</dt><dd>'+esc(SRC[n.src].n)+'</dd></dl>'}
  else if(q.k==='step'){const s=q.o;
-  el.innerHTML='<div class="kind">'+stageDot(s.stage)+'Journey step, '+esc(SL[s.stage].toLowerCase())+'</div><q>'+esc(s.t)+'</q><p class="hint">'+esc(s.d)+'</p><dl><dt>Closest match for</dt><dd>'+s.n+(s.n===1?' need':' needs')+'</dd><dt>Built for</dt><dd>'+(s.shop?esc(SHOP[s.shop].n):'Owners, after purchase')+'</dd></dl>'}
+  el.innerHTML='<div class="kind">'+stageDot(s.stage)+'Journey step, '+esc(SL[s.stage].toLowerCase())+'</div><q>'+esc(s.t)+'</q><p class="hint">'+esc(s.d)+'</p><dl><dt>Closest match for</dt><dd>'+s.n+(s.n===1?' need':' needs')+'</dd><dt>Built for</dt><dd>'+(s.shop?esc(SHOP[s.shop].n):'Owners, after purchase')+'</dd></dl>'+(()=>{const ns=D.needs.map((n,i)=>[n,i]).filter(([n])=>n.step===q.i);return ns.length?'<p class="hint">Needs linked to this step. Select one to see it.</p><ul class="linked">'+ns.map(([n,i])=>'<li><button type="button" class="lk" data-i="'+i+'">'+(n.open?'<span class="flag">'+(n.gap?'Unanswered':'Partly')+'</span> ':'')+esc(n.t)+'</button></li>').join('')+'</ul>':''})()}
 }
+document.getElementById('detail').addEventListener('click',e=>{const b=e.target.closest('button.lk');if(b)select(pts[+b.dataset.i])});
 function select(q){if(q&&typeof stopSpin==='function')stopSpin();sel=q;detail();draw();renderRows()}
 function selectNeed(i){select(pts[i]);document.getElementById('fig').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'})}
 let drag=null;
@@ -497,7 +505,7 @@ cv.addEventListener('pointerup',e=>{const r=cv.getBoundingClientRect();if(drag&&
 cv.addEventListener('pointerleave',()=>{if(hover){hover=null;draw()}});
 cv.addEventListener('keydown',e=>{stopSpin();const m={ArrowLeft:[-.12,0],ArrowRight:[.12,0],ArrowUp:[0,-.12],ArrowDown:[0,.12]}[e.key];if(m){e.preventDefault();yaw+=m[0];pitch=Math.max(-1.4,Math.min(1.4,pitch+m[1]));draw()}else if(e.key==='Escape')select(null)});
 const tog=(id,fn)=>{const b=document.getElementById(id);b.addEventListener('click',()=>{const v=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(v));fn(v);draw()})};
-tog('bNeeds',v=>show.need=v);tog('bSteps',v=>show.step=v);tog('bGap',v=>gapOnly=v);tog('bSpin',v=>spin=v);
+tog('bNeeds',v=>show.need=v);tog('bSteps',v=>{show.step=v;keyEl.innerHTML=keyHTML()});tog('bGap',v=>{gapOnly=v;keyEl.innerHTML=keyHTML()});tog('bSpin',v=>spin=v);
 document.getElementById('bReset').addEventListener('click',()=>{yaw=arr?.14:.6;pitch=arr?-.12:-.35;select(null)});
 const bB=document.getElementById('bBlue'),bM=document.getElementById('bMean');
 function setArr(v){if(v===arr)return;arr=v;bB.setAttribute('aria-pressed',String(!!v));bM.setAttribute('aria-pressed',String(!v));
@@ -606,7 +614,13 @@ el.innerHTML=note+'<div class="tsum"><div><b>'+ag('src','src_r')+' of '+T.rows.l
   try{navigator.clipboard.writeText(txt).then(ok,()=>{msg.textContent='Copy is blocked here.'})}catch(e){msg.textContent='Copy is blocked here.'}});
  document.getElementById('calReset').addEventListener('click',()=>{A={};save();paint();summ();msg.textContent='Cleared.'});}
 const keyEl=document.getElementById('key');keyEl.innerHTML=keyHTML();
-document.getElementById('cby').addEventListener('input',e=>{mode=e.target.value;keyEl.innerHTML=keyHTML();draw()});
+document.getElementById('cby').addEventListener('input',e=>{mode=e.target.value;off.clear();keyEl.innerHTML=keyHTML();draw()});
+keyEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+ if(b.dataset.k){const k=b.dataset.k;if(off.has(k))off.delete(k);else off.add(k)}
+ else if(b.dataset.t==='open'){gapOnly=!gapOnly;document.getElementById('bGap').setAttribute('aria-pressed',String(gapOnly))}
+ else if(b.dataset.t==='step'){show.step=!show.step;document.getElementById('bSteps').setAttribute('aria-pressed',String(show.step))}
+ if(sel&&!visible(sel)){sel=null;detail()}
+ const sk=b.dataset.k?'[data-k="'+b.dataset.k+'"]':'[data-t="'+b.dataset.t+'"]';keyEl.innerHTML=keyHTML();const nb=keyEl.querySelector(sk);if(nb)nb.focus();draw()});
 const ro=new ResizeObserver(size);ro.observe(cv);
 const goTo=el=>{const fr=(()=>{try{return window.self!==window.top}catch(e){return true}})();if(fr){try{parent.postMessage({intentMapScroll:Math.round(el.getBoundingClientRect().top+window.scrollY)},'*')}catch(e){}}else el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})};
 {const tabs=[...document.querySelectorAll('[role=tab]')],panels=tabs.map(x=>document.getElementById(x.getAttribute('aria-controls')));
