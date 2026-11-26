@@ -220,7 +220,7 @@ details.acc.mini>summary::before{border-color:var(--pre)}
   <div class="dtitle">
    <h1 id="t">Shoppers ask about owning it before they buy it</h1>
    <p class="lede">A service blueprint with a third direction. Journey stages run across, who answers runs down, and depth shows how well each customer need is answered.</p>
-   <p class="brand"><b>Example: Larkhob</b>, a fictional premium kitchen brand. Its products, customers and questions are invented.</p>
+   <p class="brand"><b>Example: Larkhob</b>, a fictional premium kitchen brand with a made-to-order and limited-edition line, Larkhob Atelier. Its products, customers and questions are invented.</p>
   </div>
   <div class="figs" id="figs"></div>
  </div>
@@ -349,7 +349,7 @@ details.acc.mini>summary::before{border-color:var(--pre)}
    <div><h3>Accessibility layers</h3><p>Access needs are coded in three layers: digital (the website, checkout and documents online), product (the item itself, its controls and instructions), and service and place (the shop, delivery, customer service and information in other formats). Everything else is coded as not about access, for comparison. This is a researcher&rsquo;s coding.</p></div>
    <div><h3>Levels, owners and actions</h3><p>Every unanswered need gets a level, an owner and a first action, by fixed rules shown with the action list. Access needs and needs an agent would act on are critical; answers that live outside the brand are high; the rest are medium. Owners follow the lane: digital access to the web team, product access to product design, service access to customer experience, outside answers to content and partnerships. The levels come from coding, not from volume, and a company should weight them with its own data.</p></div>
    <div><h3>Where the answer lives</h3><p>Each need is also coded by where a good answer comes from: the brand&rsquo;s own pages, outside sources such as reviews, specialists and regulators, or both. An AI assistant goes wherever the best answer is, so needs answered outside the brand are where the brand stops being the authority on its own product. This is a researcher&rsquo;s coding too.</p></div>
-   <div><h3>About Larkhob</h3><p>Larkhob is a fictional kitchen brand, made up to show the method. Its four categories, the journey steps and every customer need on this page are written for the example, not collected from real customers or taken from any company. Any resemblance to an existing brand, product or business is unintended. If you believe the name or content matches an existing brand, please <a href="https://alessandrozulberti.com/contact/">get in touch</a> and it will be changed.</p></div>
+   <div><h3>About Larkhob</h3><p>Larkhob is a fictional kitchen brand, made up to show the method. Its Atelier line of numbered limited editions and made-to-order pieces gives the example its luxury needs; the journey steps were left as a premium shop would draw them. Its four categories, the journey steps and every customer need on this page are written for the example, not collected from real customers or taken from any company. Any resemblance to an existing brand, product or business is unintended. If you believe the name or content matches an existing brand, please <a href="https://alessandrozulberti.com/contact/">get in touch</a> and it will be changed.</p></div>
    <div><h3>Next version</h3><p>Swap the written needs for real queries, from E-GEO or anonymised site search, and the steps for a real blueprint. E-GEO's query text comes from Reddit and carries Reddit's terms, so publish clusters and counts rather than the queries themselves.</p></div>
   </div>
  </div>
@@ -440,7 +440,8 @@ const ACT=D.needs.map((n,i)=>{if(!n.gap&&!n.partly)return null;
  else if(n.stage==='during'){ow='Ecommerce team';ac='Fix the step in checkout'}
  else if(n.stage==='post'){ow='Customer service';ac='Add it to aftercare and help pages'}
  else{ow='Product content';ac='Answer it on the product page'}
- const why=[acc?'Access need ('+({D:'digital',P:'product',S:'service and place'})[n.acc]+')':null,n.dg==='A'?'An agent would act on it anyway':null,n.src==='X'?'The answer lives outside the brand':n.src==='M'?'The answer is partly outside the brand':null].filter(Boolean).concat(n.partly?['Only partly answered']:[]).join('. ')||'The brand holds the answer';
+ if(n.fragmented&&!acc){const names=[D.steps[n.step].t].concat((n.also||[]).map(j=>D.steps[j].t));ac='Join up '+names.join(' and ')+': give the answer in one place'}
+ const why=[acc?'Access need ('+({D:'digital',P:'product',S:'service and place'})[n.acc]+')':null,n.dg==='A'?'An agent would act on it anyway':null,n.src==='X'?'The answer lives outside the brand':n.src==='M'?'The answer is partly outside the brand':null].filter(Boolean).concat(n.fragmented?['Answer split across '+(1+(n.also||[]).length)+' steps']:n.partly?['Only partly answered']:[]).join('. ')||'The brand holds the answer';
  return{i,n,lv,ow,ac,why,rank:{Critical:0,High:1,Medium:2}[lv]}}).filter(Boolean).sort((a,b)=>a.rank-b.rank||a.n.sim-b.n.sim);
 const stepTxt=n=>n.gap?'No step answers this'+(n.missing?'. Missing: '+n.missing:''):(n.partly?'Partly: ':'')+D.steps[n.step].t;
 const gaps=D.needs.map((n,i)=>[n,i]).filter(([n])=>n.open).sort((a,b)=>a[0].sim-b[0].sim);
@@ -475,12 +476,15 @@ function draw(){
  const act=sel||hover,lk=linkOf(act);
  if(act){
   const a=project(pos(act));
+  const ND=D.needs.length,alsoOf=n=>n.also||[];
   const targets=act.k==='step'?D.needs.map((n,i)=>n.step===act.i?pts[i]:null).filter(Boolean):(lk?[lk]:[]);
+  const extra=act.k==='step'?D.needs.map((n,i)=>alsoOf(n).includes(act.i)?pts[i]:null).filter(Boolean):alsoOf(act.o).map(j=>pts[ND+j]);
   ctx.lineWidth=1.5;
-  targets.forEach(t=>{const b=project(pos(t));const dash=(act.k==='need'&&act.o.gap)||(t.k==='need'&&t.o.gap);ctx.setLineDash(dash?[5,5]:[]);ctx.strokeStyle=(act.k==='need'&&act.o.gap)||(t.k==='need'&&t.o.gap)?C.pink:C.soft;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke()});ctx.setLineDash([]);
+  targets.forEach(t=>{const b=project(pos(t));const dash=(act.k==='need'&&act.o.gap)||(t.k==='need'&&t.o.gap);ctx.setLineDash(dash?[5,5]:[]);ctx.strokeStyle=(act.k==='need'&&act.o.gap)||(t.k==='need'&&t.o.gap)?C.pink:C.soft;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke()});
+  extra.filter(visible).forEach(t=>{const b=project(pos(t));ctx.setLineDash([2,4]);ctx.strokeStyle=C.pre;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke()});ctx.setLineDash([]);
  }
  for(const {q,v} of proj){
-  const [x,y,z,f]=v,al=Math.max(.55,Math.min(1,.85-z*.3)),on=q===act||q===lk;
+  const [x,y,z,f]=v,al=Math.max(.55,Math.min(1,.85-z*.3)),on=q===act||q===lk||(act&&act.k==='need'&&q.k==='step'&&(act.o.also||[]).includes(q.i));
   ctx.globalAlpha=act&&!on&&!(act.k==='step'&&q.k==='need'&&q.o.step===act.i)?al*.45:al;
   const qc=colourOf(q);ctx.fillStyle=qc;ctx.strokeStyle=qc;
   if(q.k==='need'){const r=(q.o.open?5:4.2)*f;ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fill();if(q.o.open){if(q.o.partly)ctx.setLineDash([3,3]);ctx.lineWidth=1.8;ctx.strokeStyle=C.pink;ctx.beginPath();ctx.arc(x,y,r+3.5,0,7);ctx.stroke();ctx.setLineDash([])}}
@@ -523,7 +527,7 @@ function detail(){
  const el=document.getElementById('detail'),q=sel;
  if(!q){el.innerHTML='<div class="kind">Nothing selected</div><p class="hint">Select a point, or a row in the lists below.</p>';return}
  if(q.k==='need'){const n=q.o,s=D.steps[n.step];
-  el.innerHTML='<div class="kind">'+stageDot(n.stage)+'Shopper need, '+esc(SL[n.stage].toLowerCase())+'</div><q>'+esc(n.t)+'</q><dl><dt>Journey step</dt><dd>'+(n.gap?'<b>No step answers this</b>':(n.partly?'Partly: ':'')+stageDot(s.stage)+esc(s.t))+'</dd>'+(n.missing?'<dt>Missing step</dt><dd>'+esc(n.missing)+'</dd>':'')+(n.needs_to_know?'<dt>Needs to know</dt><dd>'+esc(n.needs_to_know)+'</dd>':'')+(n.reason?'<dt>'+(n.by==='researcher'?'Researcher':'Model')+'</dt><dd>'+esc(n.reason)+'</dd>':'')+'<dt>Closeness</dt><dd>'+n.sim.toFixed(2)+(n.gap?' <span class="flag">Unanswered</span>':n.partly?' <span class="flag">Partly answered</span>':'')+'</dd></dl><details><summary>Coding: category, shopper type, AI, tier</summary><dl><dt>Category</dt><dd>'+esc(CAT[n.cat].n)+'</dd><dt>Access</dt><dd>'+esc(ACC[n.acc].n)+'</dd><dt>Shopper type</dt><dd>'+esc(SHOP[n.shop].n)+'</dd><dt>With an AI</dt><dd>'+esc(AI[n.ai].n)+', '+esc(AI[n.ai].d)+'</dd><dt>Tier</dt><dd>'+esc(TIER[n.tier].n)+'</dd><dt>Agent</dt><dd>'+esc(DG[n.dg].n)+'</dd><dt>Answer lives</dt><dd>'+esc(SRC[n.src].n)+'</dd></dl></details>'}
+  el.innerHTML='<div class="kind">'+stageDot(n.stage)+'Shopper need, '+esc(SL[n.stage].toLowerCase())+'</div><q>'+esc(n.t)+'</q><dl><dt>Journey step</dt><dd>'+(n.gap?'<b>No step answers this</b>':(n.partly?'Partly: ':'')+stageDot(s.stage)+esc(s.t))+'</dd>'+((n.also||[]).length?'<dt>'+(n.fragmented?'Answered only by joining':'Also helps')+'</dt><dd>'+n.also.map(j=>stageDot(D.steps[j].stage)+esc(D.steps[j].t)).join('<br>')+(n.fragmented?' <span class="flag">Split across steps</span>':'')+'</dd>':'')+(n.missing?'<dt>Missing step</dt><dd>'+esc(n.missing)+'</dd>':'')+(n.needs_to_know?'<dt>Needs to know</dt><dd>'+esc(n.needs_to_know)+'</dd>':'')+(n.reason?'<dt>'+(n.by==='researcher'?'Researcher':'Model')+'</dt><dd>'+esc(n.reason)+'</dd>':'')+'<dt>Closeness</dt><dd>'+n.sim.toFixed(2)+(n.gap?' <span class="flag">Unanswered</span>':n.partly?' <span class="flag">Partly answered</span>':'')+'</dd></dl><details><summary>Coding: category, shopper type, AI, tier</summary><dl><dt>Category</dt><dd>'+esc(CAT[n.cat].n)+'</dd><dt>Access</dt><dd>'+esc(ACC[n.acc].n)+'</dd><dt>Shopper type</dt><dd>'+esc(SHOP[n.shop].n)+'</dd><dt>With an AI</dt><dd>'+esc(AI[n.ai].n)+', '+esc(AI[n.ai].d)+'</dd><dt>Tier</dt><dd>'+esc(TIER[n.tier].n)+'</dd><dt>Agent</dt><dd>'+esc(DG[n.dg].n)+'</dd><dt>Answer lives</dt><dd>'+esc(SRC[n.src].n)+'</dd></dl></details>'}
  else if(q.k==='step'){const s=q.o;
   el.innerHTML='<div class="kind">'+stageDot(s.stage)+'Journey step, '+esc(SL[s.stage].toLowerCase())+'</div><q>'+esc(s.t)+'</q><p class="hint">'+esc(s.d)+'</p><dl><dt>Closest match for</dt><dd>'+s.n+(s.n===1?' need':' needs')+'</dd><dt>Built for</dt><dd>'+(s.shop?esc(SHOP[s.shop].n):'Owners, after purchase')+'</dd></dl>'+(()=>{const ns=D.needs.map((n,i)=>[n,i]).filter(([n])=>n.step===q.i);return ns.length?'<p class="hint">Needs linked to this step. Select one to see it.</p><ul class="linked">'+ns.map(([n,i])=>'<li><button type="button" class="lk" data-i="'+i+'">'+(n.open?'<span class="flag">'+(n.gap?'Unanswered':'Partly')+'</span> ':'')+esc(n.t)+'</button></li>').join('')+'</ul>':''})()}
 }

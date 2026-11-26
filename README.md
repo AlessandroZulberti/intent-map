@@ -7,7 +7,7 @@ Intent map adds that measure as a third direction. Customer needs are set agains
 **Live page:** https://alessandrozulberti.github.io/intent-map/
 **Written up at:** https://alessandrozulberti.com
 
-The example is **Larkhob, a fictional kitchen brand** made up to show the method. Its products, customers, journey and every customer need in this repository are invented, not collected from real people or taken from any company. Any resemblance to an existing brand is unintended; if you think the name matches one, please [get in touch](https://alessandrozulberti.com/contact/) and it will be changed.
+The example is **Larkhob, a fictional kitchen brand** made up to show the method, with a made-to-order and limited-edition line, Larkhob Atelier. Its products, customers, journey and every customer need in this repository are invented, not collected from real people or taken from any company. Any resemblance to an existing brand is unintended; if you think the name matches one, please [get in touch](https://alessandrozulberti.com/contact/) and it will be changed.
 
 ## What is in here
 

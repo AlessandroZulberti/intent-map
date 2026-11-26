@@ -131,6 +131,42 @@ def judge(need, options):
             "needs_to_know": "", "step_gives": ""}
 
 
+FRAG_VERSION = "frag-1"
+FRAG_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "parts": {"type": "array", "items": {"type": "object", "properties": {
+            "step": {"type": "integer", "minimum": 1, "maximum": SHORTLIST}, "part": {"type": "string"}},
+            "required": ["step", "part"]}},
+        "together": {"type": "string", "enum": ["answers", "partly", "none"]},
+    },
+    "required": ["parts", "together"],
+}
+
+
+def fragments(need, main, others):
+    """Second pass, only for needs a step partly answers: do other steps supply the missing parts?"""
+    listing = "\n".join("%d. %s: %s" % (k + 1, s[1], s[2]) for k, s in enumerate(others))
+    prompt = (
+        "You are a strict reviewer of a shop's customer journey.\n"
+        "Need: \"%s\"\nThe main step \"%s\" (%s) answers only part of it.\n\nOther steps:\n%s\n\n"
+        "parts: list each other step that clearly supplies a specific missing part of the answer, with that part "
+        "in under 12 words. A step that only shares a topic does not count. Most needs have no such step: then "
+        "return an empty list.\ntogether: if the customer used the main step and the listed steps together, would "
+        "the need be answered (\"answers\"), still partly (\"partly\"), or not (\"none\")? With an empty list, "
+        "together is \"partly\"." % (need, main[1], main[2], listing))
+    r = post("/api/chat", {"model": JUDGE_MODEL, "stream": False, "format": FRAG_SCHEMA, "options": {"temperature": 0},
+                           "messages": [{"role": "user", "content": prompt}]})
+    try:
+        out = json.loads(r["message"]["content"])
+        idx = sorted({int(p["step"]) - 1 for p in out.get("parts", [])
+                      if 1 <= int(p["step"]) <= len(others) and p.get("part", "").strip()})
+        tog = out.get("together") if idx else "partly"
+        return {"also": idx, "together": tog if tog in ("answers", "partly", "none") else "partly"}
+    except Exception:
+        return {"also": [], "together": "partly"}
+
+
 def main():
     dry = "--dry-run" in sys.argv
     n_needs, n_steps = len(NEEDS), len(STEPS)
@@ -178,6 +214,22 @@ def main():
     if not dry:
         json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
 
+    # Second pass: for needs a step only partly answers, check whether other shortlisted steps fill the gap
+    frag = {}
+    if not dry:
+        for i, text in enumerate(need_texts):
+            v = verdicts[i]
+            if v["verdict"] != "partly" or int(v["step"]) == 0:
+                continue
+            main_j = int(shortlist[i][int(v["step"]) - 1])
+            other_j = [int(j) for j in shortlist[i] if int(j) != main_j]
+            key = FRAG_VERSION + "||" + text + "||" + STEPS[main_j][1] + "||" + "|".join(STEPS[j][1] for j in other_j)
+            if key not in cache:
+                cache[key] = fragments(text, STEPS[main_j], [STEPS[j] for j in other_j])
+            f = cache[key]
+            frag[i] = {"also": [other_j[k] for k in f["also"]], "fragmented": bool(f["also"]) and f["together"] == "answers"}
+        json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
+
     # Layout for the 'by meaning' view
     xyz = TSNE(n_components=3, perplexity=14, metric="cosine", init="pca",
                random_state=7).fit_transform(np.vstack([Ns, Ss]))
@@ -199,16 +251,20 @@ def main():
                "verdict": v["verdict"], "gap": v["verdict"] == "none", "partly": v["verdict"] == "partly",
                "reason": v["reason"].strip(), "missing": v["missing_step"].strip() if v["verdict"] != "answers" else "",
                "needs_to_know": v.get("needs_to_know", ""), "step_gives": v.get("step_gives", ""),
+               "also": frag.get(i, {}).get("also", []), "fragmented": frag.get(i, {}).get("fragmented", False),
                "by": "model",
                "shop": shop, "ai": ai, "tier": tier, "dg": dg, "src": src, "cat": CATS[i], "acc": ACC[i]}
         if i in OVERRIDES:
-            verdict, title, note = OVERRIDES[i]
+            verdict, title, note = OVERRIDES[i][:3]
             if title:
                 rec["step"] = titles.index(title)
             rec.update(verdict=verdict, gap=verdict == "none", partly=verdict == "partly",
                        reason=note, by="researcher")
             if verdict == "answers":
                 rec["missing"] = ""
+            elif len(OVERRIDES[i]) > 3:
+                rec["missing"] = OVERRIDES[i][3]
+            rec["also"], rec["fragmented"] = [], False
         out["needs"].append(rec)
     for j, (stage, title, desc) in enumerate(STEPS):
         out["steps"].append({"t": title, "d": desc, "q": STEP_QUESTIONS[title], "stage": stage,
@@ -245,6 +301,10 @@ def main():
     for key in ("acc", "cat", "shop", "dg", "src"):
         cc = Counter(n[key] for n in out["needs"]); g = Counter(n[key] for n in gaps)
         print("  %-5s" % key, ", ".join("%s %d/%d" % (k, g[k], cc[k]) for k in sorted(cc)))
+    fr = [n for n in out["needs"] if n["fragmented"]]
+    print("  Answered only by joining steps: %d" % len(fr))
+    for n in fr[:8]:
+        print("    - %s -> %s" % (n["t"][:70], " + ".join(titles[j] for j in [n["step"]] + n["also"])))
     print("  Missing steps proposed:", "; ".join("%s (%d)" % (g["name"], len(g["needs"])) for g in out["missing"][:8]))
     print("\nNext: python3 page/build_page.py data/map.json data/twin.json")
 

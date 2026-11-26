@@ -149,6 +149,19 @@ LARKHOB = [
  ("during","G","The delivery driver only rings once and I can't get to the door quickly. Can they wait or leave it with a neighbour?","P S M A B"),
  ("post","G","I'm deaf. Can I contact customer service by chat or text instead of phone?","P S M S B"),
  ("post","G","Can I get the care instructions in large print or as audio?","W S P S B"),
+ # Larkhob Atelier: numbered limited editions and made-to-order pieces
+ ("pre","C","The copper set is a numbered limited edition, but it ships in batches. Is a second batch more than the number you announced?","R C L K B"),
+ ("pre","C","Can I order a pan made to a size that fits my old range cooker?","P N L K B"),
+ ("pre","T","How long is the wait for a made-to-order espresso machine, and can I see and touch the finish in a shop first?","R F L K B"),
+ ("pre","G","Can I book a private appointment to see the Atelier pieces before ordering?","B E L K B"),
+ ("pre","T","The brass espresso machine is hand-finished. Will every one look slightly different?","R C L K B"),
+ ("pre","G","I want to commission a set as a wedding gift. Can it arrive gift-wrapped with a handwritten card?","O F L K B"),
+ ("during","G","I'm paying a deposit for a commission. What happens if I change my mind?","P S L K B"),
+ ("during","C","Can I approve the engraving and the finish before the piece is made?","P S L K B"),
+ ("post","G","Does a limited-edition piece come with a certificate, and how do I register it in my name?","W S L K B"),
+ ("post","C","My numbered pan arrived with a scratch. Will you make me another from the same edition?","W S L K B"),
+ ("post","C","Is it worth insuring the Atelier set, and do you give a valuation?","W E L S M"),
+ ("post","T","Who services a hand-built espresso machine, and will parts still exist in twenty years?","W C L K B"),
 ]
 NEEDS = [(st, t) for st, _, t, _ in LARKHOB]
 NEED_LENS = [c for _, _, _, c in LARKHOB]
@@ -212,4 +225,18 @@ STEP_QUESTIONS = {
 
 # Researcher overrides: need index -> (verdict, step title or "", note). Verdict is "answers", "partly" or "none".
 # Paste the output of "Copy overrides" on the page here. Applied after the judge, shown as the researcher's call.
-OVERRIDES = {}
+OVERRIDES = {
+    # Larkhob Atelier: researcher calls (the small judge was too generous on luxury needs)
+    101: ("none", "", "No step says how big the edition is or how batches are numbered.", "Check edition size and batches"),
+    102: ("partly", "Check it fits what I own", "Fit is covered; making a pan to a custom size is not.", "Order a custom size"),
+    103: ("partly", "Ask before buying", "The wait can be asked about; seeing and touching the finish in a shop is not offered.", "Try the finish in a shop"),
+    104: ("none", "", "Asking a question is not booking a private viewing.", "Book a private viewing"),
+    105: ("none", "", "No step explains that hand-finished pieces vary, or lets the shopper see the finish.", "Try the finish in a shop"),
+    106: ("partly", "Find a gift", "Gift ideas are covered; commission wrapping and a handwritten card are not.", "Arrange gift wrapping and a card"),
+    107: ("none", "", "Checkout covers normal payment, not a deposit or what happens if a commission is cancelled.", "Pay a deposit and know the terms"),
+    108: ("partly", "Add engraving", "The engraving can be previewed; the finish cannot, online or in a shop.", "Preview finishes online or in a shop"),
+    109: ("partly", "Repair under warranty", "Warranty is covered; a certificate and registering it in an account are not.", "Register it with its certificate"),
+    110: ("partly", "Repair under warranty", "Warranty replaces it, but not from the same numbered edition.", "Replace from the same edition"),
+    111: ("partly", "Restore or value something old", "Valuation exists for older pieces, not for a new Atelier set or insurance.", "Get a valuation for insurance"),
+    112: ("partly", "Service and maintain", "Servicing exists; no promise that parts will last twenty years.", "Check how long parts are kept"),
+}
