@@ -150,6 +150,19 @@ details.acc>summary::-webkit-details-marker{display:none}
 .fwbtn[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .fwbtn:focus-visible{outline:3px solid var(--pre);outline-offset:2px}
 .credit{display:block;margin-top:6px}
+.fwgrid{display:grid;grid-template-columns:minmax(220px,300px) minmax(0,1fr);gap:32px;align-items:start}
+@media(max-width:900px){.fwgrid{grid-template-columns:minmax(0,1fr)}}
+.fwlist{display:flex;flex-direction:column;gap:10px}
+.fwcard{all:unset;box-sizing:border-box;display:block;cursor:pointer;border:1px solid var(--rule);padding:14px 16px;min-height:44px}
+.fwlist .fwcard[aria-pressed=true]{background:var(--soft-blue);color:var(--ink);border-color:var(--ink);box-shadow:inset 4px 0 0 var(--pre)}
+.fwlist .fwcard[aria-pressed=true] span{color:var(--soft)}
+.fwcard:focus-visible{outline:3px solid var(--pre);outline-offset:2px}
+.fwcard b{display:block;font-size:17px}.fwcard span{display:block;font-size:14px;color:var(--soft);margin-top:4px}
+.fwfit{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:0 0 20px}
+.fwfit div{border-top:1px solid var(--rule);padding-top:8px}.fwfit b{display:block;font-size:24px;font-weight:500}.fwfit span{font-size:14px;color:var(--soft)}
+.fwtab{font-size:15px}.fwtab th,.fwtab td{padding:10px 12px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+.fwtab td.n{text-align:right;white-space:nowrap}.fwtab .st{font-weight:600}
+.fwacts{margin:18px 0 0;padding-left:1.2em}.fwacts li{margin:0 0 8px}
 .xtab{font-size:14px;margin:4px 0 18px}.xtab th,.xtab td{padding:6px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}.xtab td{text-align:right;white-space:nowrap}.xtab thead th{font-weight:600}
 details.acc>summary::before{content:"";flex:none;width:9px;height:9px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(-45deg);transition:transform .15s}
 details.acc[open]>summary::before{transform:rotate(45deg)}
@@ -255,6 +268,16 @@ details.acc.mini>summary::before{border-color:var(--pre)}
  </div>
 </section>
 
+<section class="band fwapplied" id="fwApplied" aria-labelledby="fwa" hidden>
+ <div class="wrap">
+  <h2 id="fwa">Frameworks applied</h2>
+  <p class="lede">Each framework is applied to both sides of the blueprint: the needs it says matter, and the journey steps meant to serve them. Where the two do not meet, the blueprint has a gap that framework can name.</p>
+  <div class="fwgrid">
+   <div class="fwlist" id="fwList" role="group" aria-label="Choose a framework"></div>
+   <div class="fwbody" id="fwBody" aria-live="polite"></div>
+  </div>
+ </div>
+</section>
 <section class="band actband" aria-labelledby="act">
  <div class="wrap">
   <h2 id="act">What to do about it</h2>
@@ -415,6 +438,9 @@ details.acc.mini>summary::before{border-color:var(--pre)}
 <script>
 {
 const D=__DATA__;
+if(D.dashboard){document.documentElement.classList.add('dashboard');
+ document.getElementById('tab-how')?.remove();
+ document.querySelectorAll('#panel-how, .dtitle .lede, .dtitle .brand, details.howto').forEach(e=>{e.hidden=true;e.setAttribute('aria-hidden','true');});}
 const sc=a=>a.map(v=>v*.9);
 const C={pre:'#8fd3ff',during:'#c7b5ff',post:'#e9d8b4',pink:'#ff5c8a',ink:'#ffffff',soft:'#b9cbe0',bg:'#071b30'};
 const SL={pre:'Pre-purchase',during:'During',post:'Post-purchase'};
@@ -431,11 +457,14 @@ const SRC={B:{n:'With the brand',d:'help pages, specs, policies'},M:{n:'Both',d:
 Object.keys(SRC).forEach((k,i)=>SRC[k].c=PAL[i]);
 Object.keys(TIER).forEach((k,i)=>TIER[k].c=PAL[i]);Object.keys(DG).forEach((k,i)=>DG[k].c=PAL[i]);
 Object.keys(SHOP).forEach((k,i)=>SHOP[k].c=PAL[i]);Object.keys(AI).forEach((k,i)=>AI[k].c=PAL[i]);
+const LENS={shop:SHOP,ai:AI,tier:TIER,dg:DG,src:SRC,cat:CAT,acc:ACC};
+{const FPAL=['#8fd3ff','#c7b5ff','#e9d8b4','#6fe0c8','#ff9b71','#ffffff','#f7a8d8','#a8e06f','#ffd166'],sel=document.getElementById('cby');
+ (D.frameworks||[]).forEach(f=>{Object.keys(f.codes).forEach((k,i)=>f.codes[k].c=FPAL[i%FPAL.length]);LENS[f.key]=f.codes;});}
 let mode='stage';
-function colourOf(q){if(mode==='stage')return C[q.o.stage];if(q.k==='step')return mode==='shop'&&q.o.shop?SHOP[q.o.shop].c:'#5d7a99';return({shop:SHOP,ai:AI,tier:TIER,dg:DG,src:SRC,cat:CAT,acc:ACC})[mode][q.o[mode]].c}
+function colourOf(q){if(mode==='stage')return C[q.o.stage];if(q.k==='step')return mode==='shop'&&q.o.shop?SHOP[q.o.shop].c:'#5d7a99';return (LENS[mode][q.o[mode]]||{c:'#5d7a99'}).c}
 const on=new Set();
 function valOf(q){if(mode==='stage')return q.o.stage;return q.k==='need'?q.o[mode]:null}
-function keyHTML(){const it=mode==='stage'?Object.keys(SL).map(k=>[k,C[k],SL[k]]):Object.entries(({shop:SHOP,ai:AI,tier:TIER,dg:DG,src:SRC,cat:CAT,acc:ACC})[mode]).map(([k,o])=>[k,o.c,o.n]);return '<span class="lab">Filter</span>'+it.map(([k,c,n])=>'<button type="button" data-k="'+esc(k)+'" aria-pressed="'+on.has(k)+'"><i style="background:'+c+'"></i>'+esc(n)+'</button>').join('')+'<button type="button" data-t="open" aria-pressed="'+gapOnly+'"><i style="background:transparent;box-shadow:0 0 0 2px var(--pink)"></i>Only not fully answered</button><button type="button" data-t="step" aria-pressed="'+(!show.need)+'">Only journey steps</button>'+((on.size||gapOnly||!show.need)?'<button type="button" data-t="all" class="clear">Show everything</button>':'')}
+function keyHTML(){const it=mode==='stage'?Object.keys(SL).map(k=>[k,C[k],SL[k]]):Object.entries(LENS[mode]).map(([k,o])=>[k,o.c,o.n]);return '<span class="lab">Filter</span>'+it.map(([k,c,n])=>'<button type="button" data-k="'+esc(k)+'" aria-pressed="'+on.has(k)+'"><i style="background:'+c+'"></i>'+esc(n)+'</button>').join('')+'<button type="button" data-t="open" aria-pressed="'+gapOnly+'"><i style="background:transparent;box-shadow:0 0 0 2px var(--pink)"></i>Only not fully answered</button><button type="button" data-t="step" aria-pressed="'+(!show.need)+'">Only journey steps</button>'+((on.size||gapOnly||!show.need)?'<button type="button" data-t="all" class="clear">Show everything</button>':'')}
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pts=[];
 D.needs.forEach((n,i)=>pts.push({k:'need',i,p:n.p,c:C[n.stage],o:n}));
@@ -624,7 +653,7 @@ const tt=lens('tier',TIER,'rTier','hTier',false),td=lens('dg',DG,'rDg','hDg',fal
  BUILT.forEach(([k,h])=>{const e=document.getElementById(h);if(e)e.closest('details').dataset.fw=k;});
  FW.forEach((f,ix)=>{const d=document.createElement('details');d.className='acc';d.dataset.fw=f.key;
   d.innerHTML='<summary><h3 id="hFw'+ix+'"></h3></summary><p class="hint">'+esc(f.hint||'')+(f.credit?'<span class="credit">'+esc(f.credit)+'</span>':'')+'</p><div class="rows" id="rFw'+ix+'"></div>';
-  box.appendChild(d);
+  if(D.dashboard){box.prepend(d);d.open=true;}else box.appendChild(d);
   const top=lens(f.key,f.codes,'rFw'+ix,'hFw'+ix,false);
   document.getElementById('hFw'+ix).textContent=f.name+': '+(top?f.codes[top.k].n+' is where most needs are left open':'no needs coded');
   const DEF={shop:SHOP,ai:AI,tier:TIER,dg:DG,src:SRC,cat:CAT,acc:ACC},LAB={shop:'Shopper type',ai:'AI conversation type',tier:'Price tier',dg:'Agent delegation',src:'Where the answer lives',cat:'Category',acc:'Access layer'};
@@ -641,6 +670,38 @@ const tt=lens('tier',TIER,'rTier','hTier',false),td=lens('dg',DG,'rDg','hDg',fal
   bar.innerHTML='<span class="hint">Frameworks shown:</span>'+groups.map((g,i)=>'<button type="button" class="fwbtn" aria-pressed="true" data-g="'+i+'">'+esc(g.name)+'</button>').join('');
   bar.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const g=groups[+b.dataset.g];g.on=!g.on;b.setAttribute('aria-pressed',String(g.on));show();}));}
  show();}
+{const FW=D.frameworks||[],sec=document.getElementById('fwApplied');
+ if(FW.length){sec.hidden=false;
+  const list=document.getElementById('fwList'),body=document.getElementById('fwBody');
+  const plural=(n,w)=>n+' '+w+(n===1?'':'s');
+  const fit=f=>{const coded=D.needs.filter(n=>n[f.key]),un=coded.filter(n=>n[f.key]==='U').length,share=coded.length?un/coded.length:0;
+   return {coded:coded.length,un,share,two:D.needs.filter(n=>n[f.key+'_2']).length,steps:D.steps.filter(s=>s[f.key]).length,
+    word:share>=0.15?'Weak fit':share>=0.05?'Partial fit':'Good fit'};};
+  const levels=f=>{const all=D.needs.filter(n=>n[f.key]&&n[f.key]!=='U'),avg=all.length?all.filter(n=>n.open).length/all.length:0;
+   const L=Object.keys(f.codes).filter(c=>c!=='U').map(c=>{
+    const nd=D.needs.filter(n=>n[f.key]===c),op=nd.filter(n=>n.open),st=D.steps.filter(s=>s[f.key]===c);
+    const opBefore=op.filter(n=>n.stage!=='post').length,stBefore=st.filter(s=>s.stage==='pre').length,share=nd.length?op.length/nd.length:0;
+    let status,act='',flag=false;
+    if(!nd.length){status='No needs coded';}
+    else if(!st.length){status='No step serves it';flag=true;act='Add a journey step for '+f.codes[c].n+': '+plural(op.length,'need')+' are left open with nowhere to go.';}
+    else if(opBefore&&!stBefore){status='Answer comes too late';flag=true;act=f.codes[c].n+': '+plural(opBefore,'open need')+' are asked before purchase, but its steps ('+st.map(s=>s.t).join(', ')+') only come at checkout or after. Bring the answer forward into the pre-purchase steps.';}
+    else if(share>=avg+0.1){status='Worse than the journey average';flag=true;act=f.codes[c].n+': '+op.length+' of '+nd.length+' needs open, against '+Math.round(avg*100)+'% across the journey. Rewrite '+(st.length>2?'its '+st.length+' steps':st.map(s=>s.t).join(' and '))+' against these needs.';}
+    else status='In line with the journey';
+    return {c,n:f.codes[c].n,d:f.codes[c].d||'',nd:nd.length,op:op.length,st,status,act,flag};});
+   L.avg=avg;return L;};
+  const render=ix=>{const f=FW[ix],F=fit(f),L=levels(f);
+   list.querySelectorAll('.fwcard').forEach((b,k)=>b.setAttribute('aria-pressed',String(k===ix)));
+   const acts=L.filter(x=>x.act).map(x=>x.act);
+   if(F.share>=0.05)acts.push(plural(F.un,'need')+' fit no level of '+f.name+'. '+(F.share>=0.15?'The framework misses part of this journey: add a level, or pair it with another framework that covers these needs.':'Check whether they share a theme a level could take on.'));
+   body.innerHTML='<div class="fwfit"><div><b>'+esc(F.word)+'</b><span>'+F.un+' of '+F.coded+' needs fit no level</span></div><div><b>'+F.two+'</b><span>needs fit two levels</span></div><div><b>'+F.steps+' of '+D.steps.length+'</b><span>journey steps coded</span></div></div>'
+    +'<div class="scroll"><table class="fwtab"><thead><tr><th scope="col">Level</th><th scope="col">Needs</th><th scope="col">Not fully answered</th><th scope="col">Steps that serve it</th><th scope="col">Status</th></tr></thead><tbody>'
+    +L.map(x=>'<tr><th scope="row">'+esc(x.n)+'<br><span class="hint">'+esc(x.d)+'</span></th><td class="n">'+x.nd+'</td><td class="n">'+x.op+'</td><td>'+(x.st.length?esc(x.st.map(s=>s.t).join(', ')):'None')+'</td><td class="st">'+(x.flag?'<b>'+esc(x.status)+'</b>':esc(x.status))+'</td></tr>').join('')
+    +'</tbody></table></div><p class="hint">Across the journey, '+Math.round(L.avg*100)+'% of needs placed in a level are not fully answered.</p>'
+    +(acts.length?'<h3>Suggested updates</h3><ol class="fwacts">'+acts.map(a=>'<li>'+esc(a)+'</li>').join('')+'</ol>':'<p class="hint">No updates suggested: every level with needs has steps that mostly answer them.</p>')
+    +'<p class="hint">Rules: a level with open needs and no step needs a step; a level with open needs before purchase but no pre-purchase step needs the answer brought forward; a level 10 points or more above the journey average needs its steps rewritten. Fit: under 5% of needs placed nowhere is a good fit, 15% or more is weak.</p>';};
+  list.innerHTML=FW.map((f,k)=>{const F=fit(f);return '<button type="button" class="fwcard" aria-pressed="false" data-k="'+k+'"><b>'+esc(f.name)+'</b><span>'+esc(F.word)+'. '+F.coded+' needs and '+F.steps+' steps coded.</span></button>';}).join('');
+  list.querySelectorAll('.fwcard').forEach(b=>b.addEventListener('click',()=>render(+b.dataset.k)));
+  render(0);}}
 {const sh=f=>{const a=D.needs.filter(f);return a.filter(n=>n.open).length/a.length};const rb=sh(n=>n.src!=='B')/sh(n=>n.src==='B');
 document.getElementById('hSrc').textContent=rb>1.2?'Needs answered beyond the brand are '+(rb>=1.8&&rb<2.3?'twice':rb.toFixed(1)+' times')+' as likely to be left open':'Where the answer lives barely changes the picture';}
 const tg=Object.keys(TIER).map(k=>{const a=D.needs.filter(n=>n.tier===k);return a.length>=10?a.filter(n=>n.open).length/a.length:null}).filter(v=>v!==null);

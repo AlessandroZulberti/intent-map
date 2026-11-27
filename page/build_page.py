@@ -1,9 +1,10 @@
 """Bake the map data into the page.
 
 Usage (from the repository root):
-  python3 page/build_page.py data/map.json [data/twin.json] [--framework FILE ...] [--out FILE]
+  python3 page/build_page.py data/map.json [data/twin.json] [--framework FILE ...] [--dashboard] [--out FILE]
 
 --framework adds a framework's lens to the page; repeat it to add several. See frameworks/README.md.
+--dashboard leaves out the sections that explain the method and leads with the frameworks.
 --out writes the page somewhere other than index.html, for a version you do not publish here.
 """
 import json
@@ -14,12 +15,14 @@ import sys
 here = os.path.dirname(os.path.abspath(__file__))
 root = os.path.dirname(here)
 
-args, fws, out = [], [], os.path.join(root, "index.html")
+args, fws, out, dashboard = [], [], os.path.join(root, "index.html"), False
 rest = sys.argv[1:]
 while rest:
     x = rest.pop(0)
     if x == "--framework":
         fws.append(rest.pop(0))
+    elif x == "--dashboard":
+        dashboard = True
     elif x == "--out":
         out = rest.pop(0)
     else:
@@ -53,19 +56,36 @@ for path in fws:
     if bad:
         sys.exit("%s: cross can only name %s" % (path, ", ".join(sorted(BUILT_IN))))
     coding = f.get("needs", {})
-    unknown = sorted({c for c in coding.values() if c not in codes})
+    for t, c in list(coding.items()):
+        if isinstance(c, list):
+            if not 1 <= len(c) <= 2:
+                sys.exit("%s: a need can have one code or two (primary first): %r" % (path, t))
+        else:
+            coding[t] = [c]
+    steps = f.get("steps", {})
+    titles = {s["t"]: s for s in d["steps"]}
+    unknown = sorted({c for v in coding.values() for c in v if c not in codes} | {c for c in steps.values() if c not in codes})
     if unknown:
         sys.exit("%s: needs use codes that are not in codes: %s" % (path, ", ".join(unknown)))
     missing = [t for t in coding if t not in texts]
     for t, c in coding.items():
         if t in texts:
-            texts[t][key] = c
+            texts[t][key] = c[0]
+            if len(c) > 1:
+                texts[t][key + "_2"] = c[1]
+    bad_steps = [t for t in steps if t not in titles]
+    if bad_steps:
+        sys.exit("%s: steps not in this map: %s" % (path, "; ".join(bad_steps)))
+    for t, c in steps.items():
+        titles[t][key] = c
     coded = sum(1 for n in d["needs"] if key in n)
-    print("Framework %s: %d of %d needs coded%s" % (
-        f.get("name", key), coded, len(d["needs"]),
+    print("Framework %s: %d of %d needs and %d of %d steps coded%s" % (
+        f.get("name", key), coded, len(d["needs"]), len(steps), len(d["steps"]),
         "; %d coded needs are not in this map (reworded?)" % len(missing) if missing else ""))
     d["frameworks"].append({k: f[k] for k in ("key", "name", "hint", "credit", "codes", "hide_builtin", "cross") if k in f})
 
+if dashboard:
+    d["dashboard"] = True
 h = open(os.path.join(here, "template.html"), encoding="utf-8").read()
 h = h.replace("__NN__", str(len(d["needs"]))).replace("__NS__", str(len(d["steps"])))
 h = h.replace("__THR__", str(d.get("threshold", "")))
