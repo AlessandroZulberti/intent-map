@@ -2,3 +2,6 @@
 __pycache__/
 pipeline/judge_cache.json
 .DS_Store
+
+# Private frameworks and private builds: never committed
+private/

@@ -145,6 +145,12 @@ details.fold{padding-block:4px}details.fold>summary{cursor:pointer}details.fold>
 details.acc{border-top:1px solid var(--rule)}
 details.acc>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:14px 0;min-height:48px}
 details.acc>summary::-webkit-details-marker{display:none}
+.fwbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 20px}.fwbar[hidden]{display:none}
+.fwbtn{font:inherit;font-size:15px;padding:8px 14px;min-height:44px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.fwbtn[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.fwbtn:focus-visible{outline:3px solid var(--pre);outline-offset:2px}
+.credit{display:block;margin-top:6px}
+.xtab{font-size:14px;margin:4px 0 18px}.xtab th,.xtab td{padding:6px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}.xtab td{text-align:right;white-space:nowrap}.xtab thead th{font-weight:600}
 details.acc>summary::before{content:"";flex:none;width:9px;height:9px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(-45deg);transition:transform .15s}
 details.acc[open]>summary::before{transform:rotate(45deg)}
 details.acc>summary h3{margin:0;font-size:17px}
@@ -295,6 +301,7 @@ details.acc.mini>summary::before{border-color:var(--pre)}
  <div class="wrap">
   <h2 id="nl">Seven lenses on the same needs</h2>
   <p class="lede">Each need is coded by product category, accessibility layer and five lenses: NN/g&rsquo;s ecommerce shopper types, the NN/g conversation type it would most likely become with an AI assistant, the product&rsquo;s price tier, how much of it a shopper would hand to an agent, and where its answer lives. Bars show the share of each group not fully answered.</p>
+  <div class="fwbar" id="fwBar" role="group" aria-label="Frameworks shown" hidden></div>
   <div class="lens">
    <details class="acc" open><summary><h3 id="hAcc"></h3></summary><p class="hint">Three layers: the website, the product itself, and the service around it, such as the shop, delivery and customer service. No journey step is about access, so these needs have to land on steps written for something else.</p><div class="rows" id="rAcc"></div></details>
    <details class="acc"><summary><h3 id="hCat"></h3></summary><p class="hint">Journey steps are written for the shop: ordering, delivery, returns. Questions about the product itself, how it cooks, fits or ages, have further to travel.</p><div class="rows" id="rCat"></div></details>
@@ -547,7 +554,7 @@ function detail(){
  const el=document.getElementById('detail'),q=sel;
  if(!q){el.innerHTML='<div class="kind">Nothing selected</div><p class="hint">Select a point, or a row in the lists below.</p>';return}
  if(q.k==='need'){const n=q.o,s=D.steps[n.step];
-  el.innerHTML='<div class="kind">'+stageDot(n.stage)+'Shopper need, '+esc(SL[n.stage].toLowerCase())+'</div><q>'+esc(n.t)+'</q><dl><dt>Journey step</dt><dd>'+(n.gap?'<b>No step answers this</b>':(n.partly?'Partly: ':'')+stageDot(s.stage)+esc(s.t))+'</dd>'+((n.also||[]).length?'<dt>'+(n.fragmented?'Answered only by joining':'Also helps')+'</dt><dd>'+n.also.map(j=>stageDot(D.steps[j].stage)+esc(D.steps[j].t)).join('<br>')+(n.fragmented?' <span class="flag">Split across steps</span>':'')+'</dd>':'')+(n.missing?'<dt>Missing step</dt><dd>'+esc(n.missing)+'</dd>':'')+(n.needs_to_know?'<dt>Needs to know</dt><dd>'+esc(n.needs_to_know)+'</dd>':'')+(n.reason?'<dt>'+(n.by==='researcher'?'Researcher':'Model')+'</dt><dd>'+esc(n.reason)+'</dd>':'')+'<dt>Closeness</dt><dd>'+n.sim.toFixed(2)+(n.gap?' <span class="flag">Unanswered</span>':n.partly?' <span class="flag">Partly answered</span>':'')+'</dd></dl><details><summary>Coding: category, shopper type, AI, tier</summary><dl><dt>Category</dt><dd>'+esc(CAT[n.cat].n)+'</dd><dt>Access</dt><dd>'+esc(ACC[n.acc].n)+'</dd><dt>Shopper type</dt><dd>'+esc(SHOP[n.shop].n)+'</dd><dt>With an AI</dt><dd>'+esc(AI[n.ai].n)+', '+esc(AI[n.ai].d)+'</dd><dt>Tier</dt><dd>'+esc(TIER[n.tier].n)+'</dd><dt>Agent</dt><dd>'+esc(DG[n.dg].n)+'</dd><dt>Answer lives</dt><dd>'+esc(SRC[n.src].n)+'</dd></dl></details>'}
+  el.innerHTML='<div class="kind">'+stageDot(n.stage)+'Shopper need, '+esc(SL[n.stage].toLowerCase())+'</div><q>'+esc(n.t)+'</q><dl><dt>Journey step</dt><dd>'+(n.gap?'<b>No step answers this</b>':(n.partly?'Partly: ':'')+stageDot(s.stage)+esc(s.t))+'</dd>'+((n.also||[]).length?'<dt>'+(n.fragmented?'Answered only by joining':'Also helps')+'</dt><dd>'+n.also.map(j=>stageDot(D.steps[j].stage)+esc(D.steps[j].t)).join('<br>')+(n.fragmented?' <span class="flag">Split across steps</span>':'')+'</dd>':'')+(n.missing?'<dt>Missing step</dt><dd>'+esc(n.missing)+'</dd>':'')+(n.needs_to_know?'<dt>Needs to know</dt><dd>'+esc(n.needs_to_know)+'</dd>':'')+(n.reason?'<dt>'+(n.by==='researcher'?'Researcher':'Model')+'</dt><dd>'+esc(n.reason)+'</dd>':'')+'<dt>Closeness</dt><dd>'+n.sim.toFixed(2)+(n.gap?' <span class="flag">Unanswered</span>':n.partly?' <span class="flag">Partly answered</span>':'')+'</dd></dl><details><summary>Coding: category, shopper type, AI, tier</summary><dl><dt>Category</dt><dd>'+esc(CAT[n.cat].n)+'</dd><dt>Access</dt><dd>'+esc(ACC[n.acc].n)+'</dd><dt>Shopper type</dt><dd>'+esc(SHOP[n.shop].n)+'</dd><dt>With an AI</dt><dd>'+esc(AI[n.ai].n)+', '+esc(AI[n.ai].d)+'</dd><dt>Tier</dt><dd>'+esc(TIER[n.tier].n)+'</dd><dt>Agent</dt><dd>'+esc(DG[n.dg].n)+'</dd><dt>Answer lives</dt><dd>'+esc(SRC[n.src].n)+'</dd>'+(D.frameworks||[]).map(f=>n[f.key]&&f.codes[n[f.key]]?'<dt>'+esc(f.name)+'</dt><dd>'+esc(f.codes[n[f.key]].n)+'</dd>':'').join('')+'</dl></details>'}
  else if(q.k==='step'){const s=q.o;
   el.innerHTML='<div class="kind">'+stageDot(s.stage)+'Journey step, '+esc(SL[s.stage].toLowerCase())+'</div><q>'+esc(s.t)+'</q><p class="hint">'+esc(s.d)+'</p><dl><dt>Closest match for</dt><dd>'+s.n+(s.n===1?' need':' needs')+'</dd><dt>Built for</dt><dd>'+(s.shop?esc(SHOP[s.shop].n):'Owners, after purchase')+'</dd></dl>'+(()=>{const ns=D.needs.map((n,i)=>[n,i]).filter(([n])=>n.step===q.i);return ns.length?'<p class="hint">Needs linked to this step. Select one to see it.</p><ul class="linked">'+ns.map(([n,i])=>'<li><button type="button" class="lk" data-i="'+i+'">'+(n.open?'<span class="flag">'+(n.gap?'Unanswered':'Partly')+'</span> ':'')+esc(n.t)+'</button></li>').join('')+'</ul>':''})()}
 }
@@ -611,6 +618,29 @@ const tt=lens('tier',TIER,'rTier','hTier',false),td=lens('dg',DG,'rDg','hDg',fal
  document.getElementById('lAcc').innerHTML=D.needs.map((n,i)=>[n,i]).filter(([n])=>n.open&&n.acc!=='N').sort((a,b)=>a[0].sim-b[0].sim).map(([n,i])=>'<li><button type="button" class="rowbtn" data-n="'+i+'">'+esc(n.t)+'</button> <span class="hint">'+esc(ACC[n.acc].n)+'. '+esc(stepTxt(n))+'</span></li>').join('')||'<li>None in this run.</li>';
  document.querySelectorAll('#lAcc [data-n]').forEach(b=>b.addEventListener('click',()=>selectNeed(+b.dataset.n)));}
 {const tc=lens('cat',CAT,'rCat','hCat',false);document.getElementById('hCat').textContent='Questions about '+CAT[tc.k].n.toLowerCase()+' are most often left open';}
+{const FW=D.frameworks||[],box=document.querySelector('.lens'),bar=document.getElementById('fwBar');
+ const NUM=['No','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve'];
+ const BUILT=[['acc','hAcc'],['cat','hCat'],['shop','hShop'],['ai','hAi'],['tier','hTier'],['dg','hDg'],['src','hSrc']];
+ BUILT.forEach(([k,h])=>{const e=document.getElementById(h);if(e)e.closest('details').dataset.fw=k;});
+ FW.forEach((f,ix)=>{const d=document.createElement('details');d.className='acc';d.dataset.fw=f.key;
+  d.innerHTML='<summary><h3 id="hFw'+ix+'"></h3></summary><p class="hint">'+esc(f.hint||'')+(f.credit?'<span class="credit">'+esc(f.credit)+'</span>':'')+'</p><div class="rows" id="rFw'+ix+'"></div>';
+  box.appendChild(d);
+  const top=lens(f.key,f.codes,'rFw'+ix,'hFw'+ix,false);
+  document.getElementById('hFw'+ix).textContent=f.name+': '+(top?f.codes[top.k].n+' is where most needs are left open':'no needs coded');
+  const DEF={shop:SHOP,ai:AI,tier:TIER,dg:DG,src:SRC,cat:CAT,acc:ACC},LAB={shop:'Shopper type',ai:'AI conversation type',tier:'Price tier',dg:'Agent delegation',src:'Where the answer lives',cat:'Category',acc:'Access layer'};
+  (f.cross||[]).filter(k=>DEF[k]).forEach(k=>{
+   const cols=Object.keys(f.codes).filter(c=>D.needs.some(n=>n[f.key]===c)),rws=Object.keys(DEF[k]).filter(r=>D.needs.some(n=>n[k]===r&&n[f.key]));
+   if(!cols.length||!rws.length)return;
+   d.insertAdjacentHTML('beforeend','<p class="hint">Not fully answered, by '+(k==='ai'?'AI conversation type':LAB[k].toLowerCase())+' and '+esc(f.name)+'. Bold: half or more of at least two needs.</p><div class="scroll"><table class="xtab"><thead><tr><th scope="col">'+LAB[k]+'</th>'+cols.map(c=>'<th scope="col">'+esc(f.codes[c].n)+'</th>').join('')+'</tr></thead><tbody>'+rws.map(r=>'<tr><th scope="row">'+esc(DEF[k][r].n)+'</th>'+cols.map(c=>{const a=D.needs.filter(n=>n[k]===r&&n[f.key]===c),u=a.filter(n=>n.open).length,s=a.length?u+' of '+a.length:'';return '<td>'+(a.length>=2&&u/a.length>=0.5?'<b>'+s+'</b>':s)+'</td>';}).join('')+'</tr>').join('')+'</tbody></table></div>');});
+ });
+ const hide=new Set(FW.flatMap(f=>f.hide_builtin||[]));
+ const groups=[{name:'Built-in lenses',keys:BUILT.map(b=>b[0]).filter(k=>!hide.has(k)),on:true}].concat(FW.map(f=>({name:f.name,keys:[f.key],on:true}))).filter(g=>g.keys.length);
+ const show=()=>{let n=0;box.querySelectorAll('details[data-fw]').forEach(d=>{const on=!hide.has(d.dataset.fw)&&groups.some(g=>g.on&&g.keys.includes(d.dataset.fw));d.hidden=!on;if(on)n++;});
+  document.getElementById('nl').textContent=(NUM[n]||n)+(n===1?' lens':' lenses')+' on the same needs';};
+ if(FW.length){bar.hidden=false;
+  bar.innerHTML='<span class="hint">Frameworks shown:</span>'+groups.map((g,i)=>'<button type="button" class="fwbtn" aria-pressed="true" data-g="'+i+'">'+esc(g.name)+'</button>').join('');
+  bar.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const g=groups[+b.dataset.g];g.on=!g.on;b.setAttribute('aria-pressed',String(g.on));show();}));}
+ show();}
 {const sh=f=>{const a=D.needs.filter(f);return a.filter(n=>n.open).length/a.length};const rb=sh(n=>n.src!=='B')/sh(n=>n.src==='B');
 document.getElementById('hSrc').textContent=rb>1.2?'Needs answered beyond the brand are '+(rb>=1.8&&rb<2.3?'twice':rb.toFixed(1)+' times')+' as likely to be left open':'Where the answer lives barely changes the picture';}
 const tg=Object.keys(TIER).map(k=>{const a=D.needs.filter(n=>n.tier===k);return a.length>=10?a.filter(n=>n.open).length/a.length:null}).filter(v=>v!==null);

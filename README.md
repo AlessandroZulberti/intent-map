@@ -14,6 +14,7 @@ The example is **Larkhob, a fictional kitchen brand** made up to show the method
 | Folder | What it holds |
 |---|---|
 | `pipeline/` | `build_map.py` runs the models; `larkhob_data.py` holds the steps, customer needs, coding and researcher overrides; `eval_judge.py`, `gold_labels.json` and `ablation.py` test the judge; `regroup.py` regroups the proposed missing steps without judging again |
+| `frameworks/` | How to add your own framework as a lens, and a worked example |
 | `page/` | `template.html` (the interactive page) and `build_page.py`, which bakes the data into `index.html` |
 | `data/` | `map.json` (model results), `twin.json` (digital twin results) and `validation/` (the judge test runs) |
 | `twins/` | The digital twin survey, its answer key, and `compare_twins.py` to read an ExploraTwin export |
@@ -59,6 +60,10 @@ Everything about the example lives in `pipeline/larkhob_data.py`:
 - `OVERRIDES`: your own calls where you disagree with the model
 
 Real needs make the map far more useful than written ones: site search, contact reasons, chat transcripts, survey answers. Remove personal data first, and weight the action list by how often each need is asked.
+
+## Add your own framework
+
+The lenses on the page are not fixed. Any framework your team uses (a conversion model, a service-quality scale, your own codes) can be added as a lens on the same needs, crossed with shopper type or AI conversation type, and switched on and off on the page. A framework you cannot publish stays in `private/`, which git ignores. See [`frameworks/README.md`](frameworks/README.md).
 
 ## How the method works
 

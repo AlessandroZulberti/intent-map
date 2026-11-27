@@ -252,3 +252,7 @@ OVERRIDES = {
     111: ("partly", "Restore or value something old", "Valuation exists for older pieces, not for a new Atelier set or insurance.", "Get a valuation for insurance"),
     112: ("partly", "Service and maintain", "Servicing exists; no promise that parts will last twenty years.", "Check how long parts are kept"),
 }
+
+
+# Ten needs for the "Check the judge" exercise on the page, chosen by the researcher (indexes into NEEDS)
+CALIB = [1, 93, 15, 17, 99, 22, 21, 8, 98, 64]

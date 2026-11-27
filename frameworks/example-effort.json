@@ -1,0 +1,47 @@
+{
+ "key": "effort",
+ "name": "Effort to answer",
+ "hint": "An example framework: how much it takes to answer each need. Replace it with your own; see frameworks/README.md.",
+ "credit": "Example made for this repository.",
+ "codes": {
+  "F": {
+   "n": "A fact",
+   "d": "the brand can state it once: a spec, a policy"
+  },
+  "J": {
+   "n": "A judgement",
+   "d": "needs advice that weighs the shopper's situation"
+  },
+  "P": {
+   "n": "A person or service",
+   "d": "needs someone to act, not just information"
+  }
+ },
+ "cross": [
+  "shop"
+ ],
+ "needs": {
+  "Will the casserole fit in a standard oven with the lid on? I need the height including the knob.": "F",
+  "Does the copper set work on induction, or do I need a separate disc?": "F",
+  "Do the handles get hot after twenty minutes on the hob?": "F",
+  "Which pans can go from the hob straight into a 250 degree oven?": "F",
+  "Is the toaster wide enough for sourdough slices?": "F",
+  "Will the stand mixer fit under my wall cupboards? I have 45 centimetres of clearance.": "F",
+  "Is the blender jug BPA-free?": "F",
+  "Is the 14-day return period from when I ordered or when it arrived?": "F",
+  "Is this frying pan's coating PTFE-free? I've read worrying things about non-stick and I don't know what to believe.": "J",
+  "Is a tri-ply stainless pan really better than aluminium for someone who cooks every night?": "J",
+  "Is the hand-hammered copper range worth three times the price of the stainless one, or is it just for show?": "J",
+  "I want my first espresso machine. I drink two flat whites a day and I've never steamed milk.": "J",
+  "I need a wedding present from their list, under a hundred pounds, that will still be in their kitchen in ten years.": "J",
+  "Can I return a gift if they already have one, without them seeing the price?": "P",
+  "Can I talk to someone who knows the products? I don't know what I need.": "P",
+  "The checkout timed out while I was looking for my card. Do I have to start again?": "P",
+  "I'm ordering for our café. Can I get a VAT invoice with the business name?": "P",
+  "Can I change the pan size after I've placed the order?": "P",
+  "The parcel says delivered but nothing arrived.": "P",
+  "My grandmother left me her copper pans. Can they be re-tinned, and what would it cost?": "P",
+  "I'm deaf. Can I contact customer service by chat or text instead of phone?": "P",
+  "Can I book a private appointment to see the Atelier pieces before ordering?": "P"
+ }
+}

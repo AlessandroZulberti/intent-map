@@ -25,7 +25,7 @@ import numpy as np
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.manifold import TSNE
 
-from larkhob_data import STEPS, NEEDS, NEED_LENS, STEP_TYPE, CATS, ACC, STEP_QUESTIONS, OVERRIDES
+from larkhob_data import CALIB, STEPS, NEEDS, NEED_LENS, STEP_TYPE, CATS, ACC, STEP_QUESTIONS, OVERRIDES
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 OLLAMA = "http://localhost:11434"
@@ -365,7 +365,7 @@ def main():
 
     titles = [s[1] for s in STEPS]
     out = {"model": "dry-run" if dry else "%s + %s (%s)" % (EMBED_MODEL, JUDGE_MODEL, JUDGE_VIA),
-           "needs": [], "steps": [], "missing": []}
+           "needs": [], "steps": [], "missing": [], "calib": CALIB}
     for i, (stage, text) in enumerate(NEEDS):
         shop, ai, tier, dg, src = NEED_LENS[i].split()
         v = verdicts[i]
@@ -393,6 +393,7 @@ def main():
             elif len(OVERRIDES[i]) > 3:
                 rec["missing"] = OVERRIDES[i][3]
             rec["also"], rec["fragmented"] = [], False
+        rec["open"] = rec["gap"] or rec["partly"]
         out["needs"].append(rec)
     for j, (stage, title, desc) in enumerate(STEPS):
         out["steps"].append({"t": title, "d": desc, "q": STEP_QUESTIONS[title], "stage": stage,
