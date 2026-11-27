@@ -162,7 +162,7 @@ details.acc>summary::-webkit-details-marker{display:none}
 .fwfit div{border-top:1px solid var(--rule);padding-top:8px}.fwfit b{display:block;font-size:24px;font-weight:500}.fwfit span{font-size:14px;color:var(--soft)}
 .fwtab{font-size:15px}.fwtab th,.fwtab td{padding:10px 12px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
 .fwtab td.n{text-align:right;white-space:nowrap}.fwtab .st{font-weight:600}
-.fwacts{margin:18px 0 0;padding-left:1.2em}.fwacts li{margin:0 0 8px}
+.fwacts{margin:18px 0 0;padding-left:1.2em}.fwpages td{font-size:13px;white-space:nowrap}.fwev{margin:6px 0 18px;font-size:14px}.fwev ul{padding-left:1.2em}.fwacts li{margin:0 0 8px}
 .xtab{font-size:14px;margin:4px 0 18px}.xtab th,.xtab td{padding:6px 10px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}.xtab td{text-align:right;white-space:nowrap}.xtab thead th{font-weight:600}
 details.acc>summary::before{content:"";flex:none;width:9px;height:9px;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(-45deg);transition:transform .15s}
 details.acc[open]>summary::before{transform:rotate(45deg)}
@@ -689,17 +689,47 @@ const tt=lens('tier',TIER,'rTier','hTier',false),td=lens('dg',DG,'rDg','hDg',fal
     else status='In line with the journey';
     return {c,n:f.codes[c].n,d:f.codes[c].d||'',nd:nd.length,op:op.length,st,status,act,flag};});
    L.avg=avg;return L;};
-  const render=ix=>{const f=FW[ix],F=fit(f),L=levels(f);
+  const ai=f=>{const all=D.needs.filter(n=>n[f.key]&&n[f.key]!=='U'),avg=all.length?all.filter(n=>n.open).length/all.length:0;
+   return Object.keys(AI).map(k=>{const nd=D.needs.filter(n=>n.ai===k&&n[f.key]),placed=nd.filter(n=>n[f.key]!=='U'),op=placed.filter(n=>n.open),un=nd.length-placed.length;
+    const cnt={};op.forEach(n=>cnt[n[f.key]]=(cnt[n[f.key]]||0)+1);const top=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];
+    const share=placed.length?op.length/placed.length:0;let status='In line with the journey',act='';
+    if(nd.length&&un/nd.length>=0.25){status='Framework does not reach it';act=AI[k].n+' ('+AI[k].d+'): '+un+' of '+nd.length+' needs fit no level of '+f.name+'. The framework was not built for this kind of conversation; pair it with one that is.';}
+    else if(placed.length>=3&&share>=avg+0.1){status='Worse than the journey average';act=AI[k].n+' ('+AI[k].d+'): '+op.length+' of '+placed.length+' needs open, most often at '+f.codes[top].n+'. Check that the answers for '+f.codes[top].n+' exist as plain facts an assistant can find and repeat.';}
+    else if(!nd.length)status='No needs';
+    return {k,n:AI[k].n,d:AI[k].d,nd:nd.length,op:op.length,placed:placed.length,un,top:top?f.codes[top].n:'',status,act};});};
+  const pages=f=>{if(!(f.pages&&f.pages.length))return null;const PC=f.page_check||{},cs=Object.keys(f.codes).filter(c=>c!=='U'),acts=[];
+   let meant=0,got=0,part=0,miss=0;const checked=f.pages.filter(p=>PC[p.id]).length;
+   const rows=f.pages.map(p=>{const r=PC[p.id];return {p,cells:cs.map(c=>{const m=(p.meant||[]).includes(c),v=r&&r[c]?r[c].v:null;
+    if(m&&r){meant++;if(v==='delivers')got++;else if(v==='partly')part++;else miss++;}
+    if(m&&r&&v!=='delivers')acts.push(p.name+' is meant to carry '+f.codes[c].n+(v==='partly'?', but only partly does':', but nothing on the page does')+'. '+(f.codes[c].d?'Add what answers "'+f.codes[c].d+'"':'Add content for it')+'.');
+    const w=!r?(m?'Meant':''):m?(v==='delivers'?'Meant, delivers':v==='partly'?'Meant, partly':'Meant, missing'):(v==='delivers'?'Also delivers':v==='partly'?'Partly':'');
+    return {w,gap:m&&r&&v!=='delivers',e:r&&r[c]?r[c].e:''};})};});
+   cs.forEach(c=>{const nd=D.needs.filter(n=>n[f.key]===c).length;if(!nd)return;
+    if(!f.pages.some(p=>(p.meant||[]).includes(c)))acts.push('No page is meant to carry '+f.codes[c].n+', though '+plural(nd,'need')+' sit in it. Give it a home page or section.');
+    else if(checked===f.pages.length&&!f.pages.some(p=>PC[p.id][c]&&PC[p.id][c].v==='delivers'))acts.push(f.codes[c].n+' is delivered on no page that was checked.');});
+   const model=(Object.values(PC)[0]||{})._model||'';
+   return {cs,rows,meant,got,part,miss,checked,acts,model};};
+  const render=ix=>{const f=FW[ix],F=fit(f),L=levels(f),AIx=ai(f),P=pages(f);
    list.querySelectorAll('.fwcard').forEach((b,k)=>b.setAttribute('aria-pressed',String(k===ix)));
-   const acts=L.filter(x=>x.act).map(x=>x.act);
+   const acts=L.filter(x=>x.act).map(x=>x.act).concat(AIx.filter(x=>x.act).map(x=>x.act)).concat(P?P.acts:[]);
    if(F.share>=0.05)acts.push(plural(F.un,'need')+' fit no level of '+f.name+'. '+(F.share>=0.15?'The framework misses part of this journey: add a level, or pair it with another framework that covers these needs.':'Check whether they share a theme a level could take on.'));
-   body.innerHTML='<div class="fwfit"><div><b>'+esc(F.word)+'</b><span>'+F.un+' of '+F.coded+' needs fit no level</span></div><div><b>'+F.two+'</b><span>needs fit two levels</span></div><div><b>'+F.steps+' of '+D.steps.length+'</b><span>journey steps coded</span></div></div>'
+   const src=f.source?(f.source.url&&/^https?:\/\//.test(f.source.url)?'Source: <a href="'+esc(f.source.url)+'" target="_blank" rel="noopener">'+esc(f.source.url.replace(/^https?:\/\/(www\.)?/,'').slice(0,70))+'</a>':'Source: '+esc(f.source.text||'')):(f.credit?'Source: '+esc(f.credit):'');
+   body.innerHTML=(src||f.draft?'<p class="hint">'+src+(f.draft?(src?'. ':'')+'<b>Draft</b>: levels and codes drafted by AI, not yet reviewed.':'')+'</p>':'')+'<div class="fwfit"><div><b>'+esc(F.word)+'</b><span>'+F.un+' of '+F.coded+' needs fit no level</span></div><div><b>'+F.two+'</b><span>needs fit two levels</span></div><div><b>'+F.steps+' of '+D.steps.length+'</b><span>journey steps coded</span></div></div>'
     +'<div class="scroll"><table class="fwtab"><thead><tr><th scope="col">Level</th><th scope="col">Needs</th><th scope="col">Not fully answered</th><th scope="col">Steps that serve it</th><th scope="col">Status</th></tr></thead><tbody>'
     +L.map(x=>'<tr><th scope="row">'+esc(x.n)+'<br><span class="hint">'+esc(x.d)+'</span></th><td class="n">'+x.nd+'</td><td class="n">'+x.op+'</td><td>'+(x.st.length?esc(x.st.map(s=>s.t).join(', ')):'None')+'</td><td class="st">'+(x.flag?'<b>'+esc(x.status)+'</b>':esc(x.status))+'</td></tr>').join('')
     +'</tbody></table></div><p class="hint">Across the journey, '+Math.round(L.avg*100)+'% of needs placed in a level are not fully answered.</p>'
+    +(P?'<h3>On the pages</h3><p class="hint">Each page lists the levels it is meant to carry. '+(P.checked?'An AI read each page and judged every level, without being told which were meant; a quote not found on the page cannot count as delivering. '+P.got+' of '+P.meant+' intended levels delivered, '+P.part+' partly, '+P.miss+' missing'+(P.checked<P.rows.length?' ('+P.checked+' of '+P.rows.length+' pages checked)':'')+(P.model?'. Judge: '+esc(P.model):'')+'.':'Not checked yet: run pipeline/check_pages.py.')+'</p>'
+    +'<div class="scroll"><table class="fwtab fwpages"><thead><tr><th scope="col">Page</th>'+P.cs.map(c=>'<th scope="col">'+esc(f.codes[c].n)+'</th>').join('')+'</tr></thead><tbody>'
+    +P.rows.map(r=>'<tr><th scope="row">'+esc(r.p.name)+'<br><span class="hint">'+esc(r.p.url||'')+'</span></th>'+r.cells.map(x=>'<td>'+(x.gap?'<b>'+esc(x.w)+'</b>':esc(x.w))+'</td>').join('')+'</tr>').join('')
+    +'</tbody></table></div>'
+    +(P.checked?'<details class="fwev"><summary>Words on the page the AI counted as delivering</summary><ul>'+P.rows.map(r=>r.cells.map((x,i)=>x.e?'<li><b>'+esc(r.p.name)+', '+esc(f.codes[P.cs[i]].n)+'</b>: "'+esc(x.e)+'"</li>':'').join('')).join('')+'</ul></details>':''):'')
+    +'<h3>Through AI conversations</h3><p class="hint">The same needs, grouped by the NN/g conversation type they would most likely become with an AI assistant. A framework built for a website may not reach them.</p>'
+    +'<div class="scroll"><table class="fwtab"><thead><tr><th scope="col">Conversation type</th><th scope="col">Needs</th><th scope="col">Not fully answered</th><th scope="col">Fit no level</th><th scope="col">Level most often open</th><th scope="col">Status</th></tr></thead><tbody>'
+    +AIx.filter(x=>x.nd).map(x=>'<tr><th scope="row">'+esc(x.n)+'<br><span class="hint">'+esc(x.d)+'</span></th><td class="n">'+x.nd+'</td><td class="n">'+x.op+' of '+x.placed+'</td><td class="n">'+x.un+'</td><td>'+esc(x.top||'None')+'</td><td class="st">'+(x.act?'<b>'+esc(x.status)+'</b>':esc(x.status))+'</td></tr>').join('')
+    +'</tbody></table></div>'
     +(acts.length?'<h3>Suggested updates</h3><ol class="fwacts">'+acts.map(a=>'<li>'+esc(a)+'</li>').join('')+'</ol>':'<p class="hint">No updates suggested: every level with needs has steps that mostly answer them.</p>')
-    +'<p class="hint">Rules: a level with open needs and no step needs a step; a level with open needs before purchase but no pre-purchase step needs the answer brought forward; a level 10 points or more above the journey average needs its steps rewritten. Fit: under 5% of needs placed nowhere is a good fit, 15% or more is weak.</p>';};
-  list.innerHTML=FW.map((f,k)=>{const F=fit(f);return '<button type="button" class="fwcard" aria-pressed="false" data-k="'+k+'"><b>'+esc(f.name)+'</b><span>'+esc(F.word)+'. '+F.coded+' needs and '+F.steps+' steps coded.</span></button>';}).join('');
+    +'<p class="hint">Rules: a level with open needs and no step needs a step; a level with open needs before purchase but no pre-purchase step needs the answer brought forward; a level 10 points or more above the journey average needs its steps rewritten. A page meant to carry a level that the check finds missing or partly there needs content for it. Fit: under 5% of needs placed nowhere is a good fit, 15% or more is weak.</p>';};
+  list.innerHTML=FW.map((f,k)=>{const F=fit(f);return '<button type="button" class="fwcard" aria-pressed="false" data-k="'+k+'"><b>'+esc(f.name)+'</b><span>'+esc(F.word)+'. '+F.coded+' needs and '+F.steps+' steps coded.'+(f.draft?' Draft.':'')+'</span></button>';}).join('');
   list.querySelectorAll('.fwcard').forEach(b=>b.addEventListener('click',()=>render(+b.dataset.k)));
   render(0);}}
 {const sh=f=>{const a=D.needs.filter(f);return a.filter(n=>n.open).length/a.length};const rb=sh(n=>n.src!=='B')/sh(n=>n.src==='B');

@@ -78,11 +78,18 @@ for path in fws:
         sys.exit("%s: steps not in this map: %s" % (path, "; ".join(bad_steps)))
     for t, c in steps.items():
         titles[t][key] = c
+    for pg in f.get("pages", []):
+        if not pg.get("id") or not pg.get("name") or any(c not in codes for c in pg.get("meant", [])):
+            sys.exit("%s: each page needs an id, a name and meant codes from codes: %r" % (path, pg))
+    ids = {pg["id"] for pg in f.get("pages", [])}
+    for pid, res in f.get("page_check", {}).items():
+        if pid not in ids or any(c not in codes for c in res if c != "_model"):
+            sys.exit("%s: page_check has a page or code the framework does not list: %s" % (path, pid))
     coded = sum(1 for n in d["needs"] if key in n)
     print("Framework %s: %d of %d needs and %d of %d steps coded%s" % (
         f.get("name", key), coded, len(d["needs"]), len(steps), len(d["steps"]),
         "; %d coded needs are not in this map (reworded?)" % len(missing) if missing else ""))
-    d["frameworks"].append({k: f[k] for k in ("key", "name", "hint", "credit", "codes", "hide_builtin", "cross") if k in f})
+    d["frameworks"].append({k: f[k] for k in ("key", "name", "hint", "credit", "codes", "hide_builtin", "cross", "source", "draft", "pages", "page_check") if k in f})
 
 if dashboard:
     d["dashboard"] = True
