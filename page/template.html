@@ -266,8 +266,8 @@ details.acc.mini>summary::before{border-color:var(--pre)}
 
 <section class="band msband" aria-labelledby="ms">
  <div class="wrap">
-  <h2 id="ms">Seven steps to add to the journey</h2>
-  <p class="lede">Most open needs share a missing step. Adding these seven answers them at the source. Each lists the needs it would close.</p>
+  <h2 id="ms">The missing steps, most shared first</h2>
+  <p class="lede">The judge names a specific missing step for most open needs. A few are shared by several needs; most are one-off fixes. These are the ones shared most, each with the needs it would close.</p>
   <div id="missing" class="three"></div>
  </div>
 </section>
@@ -343,7 +343,7 @@ details.acc.mini>summary::before{border-color:var(--pre)}
   <div class="method">
    <div><h3>Two layers</h3><p>__NN__ customer needs written for Larkhob across its four categories, in the way people ask: with constraints, context and doubt. __NS__ blueprint steps across pre-, during- and post-purchase, worded as a shopper would say them.</p></div>
    <div><h3>One space</h3><p>Each text is turned into a 768-number embedding with EmbeddingGemma, Google&rsquo;s open embedding model, run locally through Ollama: no data leaves the machine and nothing is paid for. Closeness is cosine similarity. The 3D layout comes from t-SNE, which keeps neighbours together but bends long distances, so read clusters, not exact positions.</p></div>
-   <div><h3>What counts as unanswered</h3><p>Closeness alone measures resemblance, not whether a step answers a need, so each need is judged twice. EmbeddingGemma shortlists the five steps nearest to it, with each step described by the questions it is there to answer. Then Gemma 3, a small language model also run locally, reads the need and the shortlist and decides: a step answers it, a step partly answers it, or none does. It gives a one-line reason and, where nothing fits, names the step the journey is missing. Both are the model&rsquo;s judgement, shown as such; a researcher can override any call.</p></div>
+   <div><h3>What counts as unanswered</h3><p>Closeness alone measures resemblance, not whether a step answers a need, so each need is judged twice. EmbeddingGemma shortlists the five steps nearest to it, with each step described by the questions it is there to answer. Then a language model reads the need and the shortlist and decides: a step answers it, a step partly answers it, or none does. It gives a one-line reason and, where nothing fits, names the step the journey is missing. Both are the model&rsquo;s judgement, shown as such; a researcher can override any call. This version uses Nemotron 3.5 Super VL, a large open model from NVIDIA, through OpenRouter: Gemma 3, the small model run locally for the first version, missed half the gaps in testing.</p></div>
    <div><h3>NN/g lenses</h3><p>Shopper types come from <a href="https://www.nngroup.com/articles/ecommerce-shoppers/">NN/g&rsquo;s five types of ecommerce shoppers</a>: product-focused, browsers, researchers, bargain hunters and one-time shoppers. They describe a shopping visit, so a sixth, Owner, is added for people caring for something they already have and value. Conversation types come from <a href="https://www.nngroup.com/articles/AI-conversation-types/">NN/g&rsquo;s six types of conversations with generative AI</a>: search query, funneling, exploring, chiseling, expanding and pinpointing. The coding of each need is a researcher&rsquo;s judgement, not NN/g&rsquo;s, and a second coder would test it.</p></div>
    <div><h3>Price tier and delegation</h3><p>Each need is also coded by price tier, from mass through premium to luxury, and by what a shopper would let an agent do with it: act on it, help research it, or leave it alone. The delegation coding follows one argument: people hand over purchases that are replaceable and keep the ones that say something about them. Both are a researcher&rsquo;s coding.</p></div>
    <div><h3>Accessibility layers</h3><p>Access needs are coded in three layers: digital (the website, checkout and documents online), product (the item itself, its controls and instructions), and service and place (the shop, delivery, customer service and information in other formats). Everything else is coded as not about access, for comparison. This is a researcher&rsquo;s coding.</p></div>
@@ -372,6 +372,26 @@ details.acc.mini>summary::before{border-color:var(--pre)}
     <div class="tools"><button type="button" id="calCopy">Copy overrides</button><button type="button" id="calReset">Clear my answers</button><span class="hint" id="calMsg" role="status"></span></div>
    </div>
   </div>
+ </div>
+</details>
+<details class="psec acc fold"><summary><h2 id="rel">How reliable is the judge?</h2></summary>
+ <div class="wrap">
+  <p class="lede">A map of gaps is only as good as the judge that finds them. On 26 November 2026 the judge was tested on 40 needs held back from any tuning, against pass marks written down before the test. No judge passed. This page now uses the one that came closest.</p>
+  <div class="scroll"><table class="stack"><thead><tr><th scope="col">Judge</th><th scope="col">Gaps found</th><th scope="col">False gaps</th><th scope="col">Agreement (kappa)</th></tr></thead><tbody>
+   <tr><td data-l="Judge">Gemma 3 4B, the first version of this page</td><td data-l="Gaps found">50%</td><td data-l="False gaps">8%</td><td data-l="Agreement">0.22</td></tr>
+   <tr><td data-l="Judge">Gemma 3 4B, with three extra rules</td><td data-l="Gaps found">32%</td><td data-l="False gaps">0%</td><td data-l="Agreement">0.16</td></tr>
+   <tr><td data-l="Judge">Nemotron 3.5 Super VL, with three extra rules</td><td data-l="Gaps found">93%</td><td data-l="False gaps">42%</td><td data-l="Agreement">0.36</td></tr>
+   <tr><td data-l="Judge">Nemotron 3.5 Super VL, used for this page</td><td data-l="Gaps found">86%</td><td data-l="False gaps">25%</td><td data-l="Agreement">0.41</td></tr>
+   <tr><td data-l="Judge">Pass mark</td><td data-l="Gaps found">80% or more</td><td data-l="False gaps">20% or less</td><td data-l="Agreement">0.50 or more</td></tr>
+  </tbody></table></div>
+  <p class="hint">Reference labels: Claude&rsquo;s, made blind before any change to the judge, with the 20 needs where Claude and Nemotron disagreed settled by the author without knowing which label was whose. Scores against Claude&rsquo;s labels alone, and the full method, are in the <a href="https://github.com/AlessandroZulberti/intent-map#how-reliable-is-the-judge">repository</a>.</p>
+  <div class="method">
+   <div><h3>The small model says yes too often</h3><p>Gemma 3 treats a shared topic as an answer and finds about half the gaps. The first version of this page undercounted what Larkhob&rsquo;s journey misses.</p></div>
+   <div><h3>A large model finds the gaps</h3><p>Nemotron 3.5 Super, an open-weight model of 120 billion parameters, finds 86% of them but calls a quarter of answered needs gaps, so this page leans towards overcounting. Rules added to rein in the small model made both worse.</p></div>
+   <div><h3>The disagreements pointed at the blueprint</h3><p>Where a step was missing, judge and researcher stretched the nearest one in different directions. Five steps Larkhob lacked came out of the review: checking what a product can do, hearing when it is back in stock, changing an order, guides, and safety advice.</p></div>
+  </div>
+  <p>A second test took one step at a time out of the journey and judged again the needs it answered. With five steps removed in turn, 10 of the 12 needs they answered became gaps, and for all five the missing step the judge proposed pointed back to the step taken out. Both results cleared pass marks set beforehand: 80% of needs, and three of five steps.</p>
+  <p>Both tests are small: 40 needs and 12 needs, and the reference labels come from the author and an AI. The next test needs a second coder from outside the project, because agreement between the two people who built the map says little about whether it is right.</p>
  </div>
 </details>
 <details class="psec acc fold"><summary><h2 id="tw">Twins against the researcher</h2></summary>

@@ -1,0 +1,138 @@
+{
+ "judge": "nvidia/nemotron-3.5-super-vl:free",
+ "prompt": "strict-2",
+ "results": [
+  {
+   "removed": "Check what it can do",
+   "affected": 4,
+   "no_longer_answered": 3,
+   "recovery_rank": 3,
+   "proposed_missing": [
+    "Check if it crushes ice",
+    "Check bread dough capability",
+    "Check oat milk compatibility"
+   ],
+   "needs": [
+    {
+     "need": "I want one good pan that does eggs in the morning and a stir-fry at night.",
+     "verdict": "answers",
+     "step_now": "Work out what I actually need",
+     "missing": ""
+    },
+    {
+     "need": "Will the blender crush ice for smoothies, or only soft fruit?",
+     "verdict": "none",
+     "step_now": "",
+     "missing": "Check if it crushes ice"
+    },
+    {
+     "need": "Can the food processor make bread dough, or will it struggle?",
+     "verdict": "partly",
+     "step_now": "Learn from guides and articles",
+     "missing": "Check bread dough capability"
+    },
+    {
+     "need": "Can I use oat milk in the frother, or will it damage it?",
+     "verdict": "none",
+     "step_now": "",
+     "missing": "Check oat milk compatibility"
+    }
+   ]
+  },
+  {
+   "removed": "Learn from guides and articles",
+   "affected": 2,
+   "no_longer_answered": 2,
+   "recovery_rank": 1,
+   "proposed_missing": [
+    "Start learning to cook",
+    "Find a latte art guide"
+   ],
+   "needs": [
+    {
+     "need": "My dad has just retired and wants to learn to cook. Where do I even start?",
+     "verdict": "none",
+     "step_now": "",
+     "missing": "Start learning to cook"
+    },
+    {
+     "need": "My son wants to learn proper latte art. Is there a beginner's guide?",
+     "verdict": "none",
+     "step_now": "",
+     "missing": "Find a latte art guide"
+    }
+   ]
+  },
+  {
+   "removed": "Check price and offers",
+   "affected": 2,
+   "no_longer_answered": 2,
+   "recovery_rank": 1,
+   "proposed_missing": [
+    "Compare sale price to usual",
+    "Compare bundle and separate prices"
+   ],
+   "needs": [
+    {
+     "need": "Is the sale price on the casserole actually lower than usual?",
+     "verdict": "none",
+     "step_now": "",
+     "missing": "Compare sale price to usual"
+    },
+    {
+     "need": "Is there a bundle that works out cheaper than the machine and grinder separately?",
+     "verdict": "none",
+     "step_now": "",
+     "missing": "Compare bundle and separate prices"
+    }
+   ]
+  },
+  {
+   "removed": "Check delivery before committing",
+   "affected": 2,
+   "no_longer_answered": 1,
+   "recovery_rank": 1,
+   "proposed_missing": [
+    "Check Saturday delivery"
+   ],
+   "needs": [
+    {
+     "need": "Will it arrive before Saturday if I order today?",
+     "verdict": "partly",
+     "step_now": "Choose delivery speed",
+     "missing": "Check Saturday delivery"
+    },
+    {
+     "need": "Which delivery option is cheapest and still arrives before the weekend?",
+     "verdict": "answers",
+     "step_now": "Choose delivery speed",
+     "missing": ""
+    }
+   ]
+  },
+  {
+   "removed": "Get safety advice",
+   "affected": 2,
+   "no_longer_answered": 2,
+   "recovery_rank": 1,
+   "proposed_missing": [
+    "Check if chipped enamel is safe",
+    "Check if it is safe"
+   ],
+   "needs": [
+    {
+     "need": "The enamel on the casserole has chipped. Is it still safe to cook in?",
+     "verdict": "none",
+     "step_now": "",
+     "missing": "Check if chipped enamel is safe"
+    },
+    {
+     "need": "The food processor has started smelling of burning. Is it safe to use?",
+     "verdict": "none",
+     "step_now": "",
+     "missing": "Check if it is safe"
+    }
+   ]
+  }
+ ]
+}

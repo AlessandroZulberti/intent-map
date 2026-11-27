@@ -9,7 +9,9 @@ STEPS = [
  ("pre","Browse a category","Browse a category to see what exists and what the range looks like."),
  ("pre","See what is new and popular","See new arrivals, best sellers and what other people are buying."),
  ("pre","Compare options","Compare two or three options side by side on features and price."),
- ("pre","Check size and weight","Check the size, weight, dimensions and what it is made of."),
+ ("pre","Check size and weight","Check the size, weight and dimensions."),
+ ("pre","Check materials and safety","Check what it is made of and whether it is safe: coatings, plastics, oven and heat limits."),
+ ("pre","Check what it can do","Check what it can handle and what it is for: capacity, settings, the foods and jobs it copes with, and what it is not designed to do."),
  ("pre","Read reviews","Read reviews and ratings from other customers who bought it."),
  ("pre","Check price and offers","Check the price, any sale, discount or bundle offer."),
  ("pre","Check it fits what I own","Check it is compatible with the devices, accessories or kit I already own."),
@@ -18,6 +20,7 @@ STEPS = [
  ("pre","Check delivery before committing","Check delivery cost and how quickly it will arrive before deciding."),
  # during
  ("during","Choose a variant","Choose the colour, size or model variant I want."),
+ ("during","Get told when it's back","Find out whether an out-of-stock colour or size is coming back, sign up to be told, or learn that it has been discontinued."),
  ("during","Add engraving","Add personalisation or engraving with a name or message."),
  ("during","Review the basket","Review the basket, quantities and total before checkout."),
  ("during","Enter the address","Enter the delivery address and contact details."),
@@ -26,10 +29,12 @@ STEPS = [
  ("during","Check out as a guest","Check out without creating an account."),
  ("during","Pay","Pay securely by card or wallet."),
  ("during","Get confirmation","Get an order confirmation email with what I bought."),
+ ("during","Change or cancel an order","Change or cancel an order after placing it, and know my right to cancel within 14 days."),
  # post
  ("post","Track the delivery","Track the parcel and know when it will arrive."),
  ("post","Unbox and set up","Unbox the product and set it up for the first time."),
  ("post","Learn to use it","Learn how to use it properly from instructions or a video."),
+ ("post","Learn from guides and articles","Learn skills and techniques from the brand's guides, articles and recipes, from first steps to more advanced use."),
  ("post","Clean and care","Clean it and look after it so it lasts."),
  ("post","Service and maintain","Descale, re-proof, condition or service it so it keeps working well."),
  ("post","Get help","Contact customer service when something is wrong with the order or product."),
@@ -37,6 +42,7 @@ STEPS = [
  ("post","Exchange it","Exchange it for a different size or colour."),
  ("post","Repair under warranty","Get it repaired or replaced under the warranty."),
  ("post","Find out what went wrong","Find out why it is wearing out, marked or not working, and whether that is normal, from the brand's help pages, other owners' reviews or outside experts."),
+ ("post","Get safety advice","Find out whether it is still safe to use after damage, a fault or a strange smell, and what to do now."),
  ("post","Fix damage myself","Find out how to fix the damage myself, compare the products that do it, and buy what I need."),
  ("post","Send it to the brand for repair","Send it to the brand's repair service, get a quote and a timescale, and get it back fixed."),
  ("post","Restore or value something old","Get something old or handed down restored, valued or checked, and find out what that would cost."),
@@ -168,7 +174,7 @@ NEED_LENS = [c for _, _, _, c in LARKHOB]
 CATS = [c for _, c, _, _ in LARKHOB]
 STEP_TYPE = {
  "Work out what I actually need":"R","Search for it":"P","Browse a category":"B","See what is new and popular":"B",
- "Compare options":"R","Check size and weight":"R","Read reviews":"R","Check price and offers":"H",
+ "Compare options":"R","Check size and weight":"R","Check materials and safety":"R","Check what it can do":"R","Get told when it's back":"P","Change or cancel an order":"O","Learn from guides and articles":"W","Get safety advice":"W","Read reviews":"R","Check price and offers":"H",
  "Check it fits what I own":"R","Find a gift":"O","Ask before buying":"O","Check delivery before committing":"O",
  "Choose a variant":"P","Add engraving":"O","Review the basket":"R","Enter the address":"O","Choose delivery speed":"P",
  "Use a discount code":"H","Clean and care":"W","Service and maintain":"W","Repair under warranty":"W","Restore or value something old":"W","Fix damage myself":"R","Find out what went wrong":"W","Send it to the brand for repair":"W","Buy spares":"W","Learn to use it":"W","Check out as a guest":"O","Pay":"P","Get confirmation":"O","Reorder":"P",
@@ -184,12 +190,18 @@ ACC = [_ACC.get(i, "N") for i in range(len(LARKHOB))]
 # The questions each journey step is there to answer, in a customer's words. Generic on purpose:
 # written for the step, not copied from any need, so matching stays a fair test.
 STEP_QUESTIONS = {
+ "Check what it can do": "Will it do the job I have in mind? What can it handle, and what can't it?",
+ "Get told when it's back": "Will it come back in stock? Can you tell me when it does? Has it been discontinued?",
+ "Change or cancel an order": "Can I change or cancel my order? How long do I have to cancel?",
+ "Learn from guides and articles": "Is there a guide to help me get better at this? Where do I start?",
+ "Get safety advice": "Is it still safe to use? What should I do now?",
  "Work out what I actually need": "What kind of product do I need for this job? Where do I start?",
  "Search for it": "Do you sell something that does this? Can I find it by describing it?",
  "Browse a category": "What is in this range? What are my options?",
  "See what is new and popular": "What is new? What are other people buying?",
  "Compare options": "What is the difference between these models? Which one is better for me?",
- "Check size and weight": "How big and how heavy is it? What is it made of? Will it fit the space I have?",
+ "Check size and weight": "How big and how heavy is it? Will it fit the space I have?",
+ "Check materials and safety": "What is it made of? Is the coating or plastic safe? How hot can it go?",
  "Read reviews": "What do other owners think of it after using it?",
  "Check price and offers": "How much is it? Is it on sale, and is the offer real?",
  "Check it fits what I own": "Will it work with my cooker, machine or other kit?",

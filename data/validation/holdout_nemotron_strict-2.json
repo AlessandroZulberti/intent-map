@@ -1,0 +1,522 @@
+{
+ "model": "embeddinggemma + nvidia/nemotron-3.5-super-vl:free (openrouter)",
+ "judge_version": "strict-2",
+ "steps": [
+  {
+   "t": "Work out what I actually need"
+  },
+  {
+   "t": "Search for it"
+  },
+  {
+   "t": "Browse a category"
+  },
+  {
+   "t": "See what is new and popular"
+  },
+  {
+   "t": "Compare options"
+  },
+  {
+   "t": "Check size and weight"
+  },
+  {
+   "t": "Check materials and safety"
+  },
+  {
+   "t": "Read reviews"
+  },
+  {
+   "t": "Check price and offers"
+  },
+  {
+   "t": "Check it fits what I own"
+  },
+  {
+   "t": "Find a gift"
+  },
+  {
+   "t": "Ask before buying"
+  },
+  {
+   "t": "Check delivery before committing"
+  },
+  {
+   "t": "Choose a variant"
+  },
+  {
+   "t": "Add engraving"
+  },
+  {
+   "t": "Review the basket"
+  },
+  {
+   "t": "Enter the address"
+  },
+  {
+   "t": "Choose delivery speed"
+  },
+  {
+   "t": "Use a discount code"
+  },
+  {
+   "t": "Check out as a guest"
+  },
+  {
+   "t": "Pay"
+  },
+  {
+   "t": "Get confirmation"
+  },
+  {
+   "t": "Track the delivery"
+  },
+  {
+   "t": "Unbox and set up"
+  },
+  {
+   "t": "Learn to use it"
+  },
+  {
+   "t": "Clean and care"
+  },
+  {
+   "t": "Service and maintain"
+  },
+  {
+   "t": "Get help"
+  },
+  {
+   "t": "Return for a refund"
+  },
+  {
+   "t": "Exchange it"
+  },
+  {
+   "t": "Repair under warranty"
+  },
+  {
+   "t": "Find out what went wrong"
+  },
+  {
+   "t": "Fix damage myself"
+  },
+  {
+   "t": "Send it to the brand for repair"
+  },
+  {
+   "t": "Restore or value something old"
+  },
+  {
+   "t": "Buy spares"
+  },
+  {
+   "t": "Reorder"
+  },
+  {
+   "t": "Recycle it"
+  }
+ ],
+ "needs": [
+  {
+   "t": "I want one good pan that does eggs in the morning and a stir-fry at night.",
+   "verdict": "partly",
+   "step": 0,
+   "by": "model",
+   "reason": "Step 4 points to the right product type but leaves the specific pan and dual-use question open.",
+   "evidence": "Step 4 points to the right product type but leaves the specific pan and dual-use question open.",
+   "flag": "",
+   "missing": "Choose a pan for both"
+  },
+  {
+   "t": "Do the handles get hot after twenty minutes on the hob?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "Step 1 covers materials and heat limits, not whether handles become hot during normal hob use.",
+   "evidence": "Step 1 covers materials and heat limits, not whether handles become hot during normal hob use.",
+   "flag": "",
+   "missing": "Check if handles get hot"
+  },
+  {
+   "t": "Is the hand-hammered copper range worth three times the price of the stainless one, or is it just for show?",
+   "verdict": "partly",
+   "step": 4,
+   "by": "model",
+   "reason": "Step 1 compares features and price but does not state whether the copper is worth the premium or just cosmetic",
+   "evidence": "Step 1 compares features and price but does not state whether the copper is worth the premium or just cosmetic",
+   "flag": "",
+   "missing": "Decide if it's worth it"
+  },
+  {
+   "t": "I'm blind. Can I use this coffee machine without reading the display?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "General instructions or a video do not say if the machine works without reading the display.",
+   "evidence": "General instructions or a video do not say if the machine works without reading the display.",
+   "flag": "",
+   "missing": "Check it works without sight"
+  },
+  {
+   "t": "I have arthritis. I need a kettle I can fill, lift and pour without much grip.",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "General care, repair and compatibility steps say nothing about filling, lifting or pouring with limited grip.",
+   "evidence": "Steps 1–5 address maintenance, cleaning, compatibility, repair and troubleshooting only; none mention arthritis, grip, lifting or pouring.",
+   "flag": "",
+   "missing": "Test filling, lifting and pouring"
+  },
+  {
+   "t": "What's the real difference between the two espresso machines apart from the steam wand?",
+   "verdict": "answers",
+   "step": 4,
+   "by": "model",
+   "reason": "Step 1 explicitly compares features and price and lists model differences as a question it answers.",
+   "evidence": "Step 1 explicitly compares features and price and lists model differences as a question it answers",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "Will the blender crush ice for smoothies, or only soft fruit?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "No step covers blending performance or ice-crushing ability; they only cover compatibility, faults, comparison, variants, and materials.",
+   "evidence": "none",
+   "flag": "",
+   "missing": "Check it crushes ice"
+  },
+  {
+   "t": "Is the toaster wide enough for sourdough slices?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "Step 3 gives overall dimensions and weight, not the slot width needed for sourdough.",
+   "evidence": "Step 3 gives overall dimensions and weight, not the slot width needed for sourdough.",
+   "flag": "",
+   "missing": "Check toaster slot width"
+  },
+  {
+   "t": "Which food processor is easy to clean for someone who hates washing up?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "Step 1 tells how to clean after purchase, not which model is easiest to choose.",
+   "evidence": "none",
+   "flag": "",
+   "missing": "Compare ease of cleaning"
+  },
+  {
+   "t": "Will the stand mixer fit under my wall cupboards? I have 45 centimetres of clearance.",
+   "verdict": "answers",
+   "step": 5,
+   "by": "model",
+   "reason": "Step 1 explicitly covers whether it fits the space and gives size and dimensions.",
+   "evidence": "Step 1 explicitly covers whether it fits the space and gives size and dimensions.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "I need a toaster that is easy to see and use with low vision: big buttons, high contrast.",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "No step mentions button size, contrast, or low-vision usability; they cover only general features and specs.",
+   "evidence": "No step mentions button size, contrast, or low-vision usability; they cover only general features and specs.",
+   "flag": "",
+   "missing": "Check button size and contrast"
+  },
+  {
+   "t": "Are the replacement filters still sold for last year's kettle?",
+   "verdict": "partly",
+   "step": 35,
+   "by": "model",
+   "reason": "Step 1 mentions filters but does not confirm they are still sold for last year's kettle.",
+   "evidence": "Step 1 mentions filters but does not confirm they are still sold for last year's kettle",
+   "flag": "",
+   "missing": "Check filter availability"
+  },
+  {
+   "t": "I need a wedding present from their list, under a hundred pounds, that will still be in their kitchen in ten years.",
+   "verdict": "partly",
+   "step": 10,
+   "by": "model",
+   "reason": "Step 1 covers gift and budget, but not the wedding list or ten-year durability.",
+   "evidence": "Step 1 covers gift and budget, but not the wedding list or ten-year durability.",
+   "flag": "",
+   "missing": "Check list and durability"
+  },
+  {
+   "t": "My dad has just retired and wants to learn to cook. Where do I even start?",
+   "verdict": "answers",
+   "step": 0,
+   "by": "model",
+   "reason": "Step 3 explicitly covers working out what you need before looking and lists “Where do I start?” as a question it answers.",
+   "evidence": "Step 3 explicitly covers working out what you need before looking and lists “Where do I start?” as a question it answers.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "What's new this season? Nothing in mind, just looking.",
+   "verdict": "answers",
+   "step": 3,
+   "by": "model",
+   "reason": "Step 1 explicitly shows new arrivals, which is exactly what a seasonal browser needs.",
+   "evidence": "Step 1 explicitly shows new arrivals, which is exactly what a seasonal browser needs.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "Is there a bundle that works out cheaper than the machine and grinder separately?",
+   "verdict": "answers",
+   "step": 8,
+   "by": "model",
+   "reason": "Step 1 explicitly includes checking bundle offers and prices, which directly answers the bundle question.",
+   "evidence": "Step 1 explicitly includes checking bundle offers and prices, which directly answers the bundle question.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "Will it arrive before Saturday if I order today?",
+   "verdict": "answers",
+   "step": 12,
+   "by": "model",
+   "reason": "Step 1 explicitly covers checking how quickly it will arrive before committing.",
+   "evidence": "Step 1 explicitly covers checking how quickly it will arrive before committing.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "Can I return a gift if they already have one, without them seeing the price?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "No step explains returning a duplicate gift or keeping the price hidden from the recipient.",
+   "evidence": "Step 1 covers sending an item back for money, not returning a gift or hiding its price.",
+   "flag": "",
+   "missing": "Return a gift without price"
+  },
+  {
+   "t": "Can I talk to someone who knows the products? I don't know what I need.",
+   "verdict": "partly",
+   "step": 11,
+   "by": "model",
+   "reason": "Step 3 provides shop contact but not explicit product expertise or needs-based advice.",
+   "evidence": "Step 3 provides shop contact but not explicit product expertise or needs-based advice",
+   "flag": "",
+   "missing": "Speak to a product expert"
+  },
+  {
+   "t": "The green colour is out of stock in this size. Will it come back?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "Step 1 shows current stock only, not whether the green colour will be restocked in that size.",
+   "evidence": "Step 1 shows current stock only, not whether the green colour will be restocked in that size.",
+   "flag": "",
+   "missing": "Check if it restocks"
+  },
+  {
+   "t": "I want to send it straight to the couple with a gift note and no price inside.",
+   "verdict": "partly",
+   "step": 16,
+   "by": "model",
+   "reason": "Step 3 covers where to deliver it, but not the gift note or hiding the price.",
+   "evidence": "Step 3 covers where to deliver it, but not the gift note or hiding the price.",
+   "flag": "",
+   "missing": "Add gift note and hide price"
+  },
+  {
+   "t": "My discount code says it's invalid but the email says it runs until Sunday.",
+   "verdict": "answers",
+   "step": 18,
+   "by": "model",
+   "reason": "Step 1 explicitly answers why a discount code fails and how to apply it.",
+   "evidence": "Step 1 explicitly lists “Why does my code not work?” as a question it answers.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "Can I pay for the espresso machine in instalments without a credit check?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "None of the steps cover payment options, instalments, or credit checks.",
+   "evidence": "none",
+   "flag": "",
+   "missing": "Check instalment options"
+  },
+  {
+   "t": "Can I change the pan size after I've placed the order?",
+   "verdict": "partly",
+   "step": 29,
+   "by": "model",
+   "reason": "Step 1 offers size swaps but does not confirm changes to an order already placed.",
+   "evidence": "Step 1 offers size swaps but does not confirm changes to an order already placed.",
+   "flag": "",
+   "missing": "Change my pan size"
+  },
+  {
+   "t": "The error message says something is wrong but not which field.",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "No step identifies the specific field; they only cover repair, contact, or general faults.",
+   "evidence": "Step 5 explains general wear or faults, while step 2 only offers contact; neither names the specific field.",
+   "flag": "",
+   "missing": "Identify the error field"
+  },
+  {
+   "t": "How do I set up the grinder? The instructions are only pictures.",
+   "verdict": "answers",
+   "step": 23,
+   "by": "model",
+   "reason": "Step 2 explicitly covers unboxing and first-time setup, which directly answers the customer's question.",
+   "evidence": "Step 2 explicitly covers unboxing and first-time setup, which directly answers the customer's question.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "My cast-iron pan has gone rusty after the dishwasher. Can I save it?",
+   "verdict": "answers",
+   "step": 32,
+   "by": "model",
+   "reason": "Step 5 explicitly covers DIY repair of damage and buying the right products, which directly answers saving the pan.",
+   "evidence": "Step 5 explicitly covers DIY repair of damage and buying the right products, which directly answers saving the pan.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "My espresso tastes sour. Is it the beans, the grind or the machine?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "No step explains how to diagnose sour espresso by bean, grind or machine",
+   "evidence": "No step explains how to diagnose sour espresso by bean, grind or machine",
+   "flag": "",
+   "missing": "Check beans, grind and machine"
+  },
+  {
+   "t": "The enamel on the casserole has chipped. Is it still safe to cook in?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "Step 1 covers general materials and heat limits, not whether a chipped enamel surface is safe for cooking.",
+   "evidence": "Step 1 covers general materials and heat limits, not whether a chipped enamel surface is safe for cooking.",
+   "flag": "",
+   "missing": "Check chipped enamel safety"
+  },
+  {
+   "t": "My grandmother left me her copper pans. Can they be re-tinned, and what would it cost?",
+   "verdict": "answers",
+   "step": 33,
+   "by": "model",
+   "reason": "The repair step includes a quote, which directly answers whether re-tinning can be done and its price.",
+   "evidence": "Step 1 offers a brand repair service with a quote and timescale, directly addressing whether the pans can be repaired and the price.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "Time to reorder the water filters. Same ones as last time.",
+   "verdict": "answers",
+   "step": 36,
+   "by": "model",
+   "reason": "Step 1 explicitly lets the customer buy the same thing again quickly, which is exactly what they need.",
+   "evidence": "Step 1 explicitly lets the customer buy the same thing again quickly, which is exactly what they need.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "I lost the receipt. Is the guarantee still valid?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "No step explicitly confirms that the guarantee remains valid without a receipt or lists acceptable alternatives.",
+   "evidence": "No step explicitly confirms that the guarantee remains valid without a receipt or lists acceptable alternatives.",
+   "flag": "",
+   "missing": "Check guarantee without receipt"
+  },
+  {
+   "t": "How do I dispose of an old toaster safely? Can it go in the bin?",
+   "verdict": "answers",
+   "step": 37,
+   "by": "model",
+   "reason": "Step 1 directly covers safe disposal and recycling at end of life, which is exactly what the customer asks.",
+   "evidence": "Step 1 is explicitly about getting rid of the item safely or recycling it at end of life.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "I'm selling my copper set second-hand. How do I prove it's genuine?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "No step explicitly offers proof of authenticity, so the customer would still be asking how to prove it.",
+   "evidence": "Step 5 offers restoration or valuation of old items, but its explicit questions are about restoration cost and value, not proof of authenticity.",
+   "flag": "",
+   "missing": "Check it's genuine"
+  },
+  {
+   "t": "The return label needs a printer and I don't have one.",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "Return instructions explain how to send it back but not how to get a label without a printer.",
+   "evidence": "Step 1 covers the refund return process but never mentions label alternatives for customers without a printer.",
+   "flag": "",
+   "missing": "Get label without printer"
+  },
+  {
+   "t": "My son wants to learn proper latte art. Is there a beginner's guide?",
+   "verdict": "answers",
+   "step": 24,
+   "by": "model",
+   "reason": "Step 1 explicitly covers instructions or a video and says it answers whether a guide exists.",
+   "evidence": "Step 1 explicitly covers instructions or a video and says it answers whether a guide exists.",
+   "flag": "",
+   "missing": ""
+  },
+  {
+   "t": "How often should I season the cast-iron pan, and with what oil?",
+   "verdict": "partly",
+   "step": 26,
+   "by": "model",
+   "reason": "Step 1 mentions seasoning but does not specify frequency or oil type.",
+   "evidence": "Step 1 mentions seasoning but does not specify frequency or oil type.",
+   "flag": "",
+   "missing": "Check seasoning frequency and oil"
+  },
+  {
+   "t": "The food processor has started smelling of burning. Is it safe to use?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "Fault diagnosis and material checks do not say whether a burning smell makes the processor unsafe to use",
+   "evidence": "Fault diagnosis and material checks do not say whether a burning smell makes the processor unsafe to use",
+   "flag": "",
+   "missing": "Check if it's safe"
+  },
+  {
+   "t": "The product photos have no descriptions, so my screen reader just says 'image'. What does the kettle look like?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "No step offers alt text or a written description of the kettle's appearance",
+   "evidence": "No step offers alt text or a written description of the kettle's appearance",
+   "flag": "",
+   "missing": "Read a product description"
+  },
+  {
+   "t": "The delivery driver only rings once and I can't get to the door quickly. Can they wait or leave it with a neighbour?",
+   "verdict": "none",
+   "step": 0,
+   "by": "model",
+   "reason": "The steps cover delivery logistics and address entry but never state whether drivers can wait or leave parcels with neighbours.",
+   "evidence": "The steps cover delivery logistics and address entry but never state whether drivers can wait or leave parcels with neighbours.",
+   "flag": "",
+   "missing": "Add delivery instructions"
+  }
+ ]
+}

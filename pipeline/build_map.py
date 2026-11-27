@@ -7,16 +7,17 @@ Two models, both free and local:
 Usage:
   python3 pipeline/build_map.py              # full run, writes data/map.json (judge answers cached in pipeline/judge_cache.json)
   python3 pipeline/build_map.py --dry-run    # random vectors and a fake judge, to test without Ollama
+  python3 pipeline/build_map.py --judge openrouter --model <id>   # judge with a larger hosted model (OPENROUTER_API_KEY)
 Then: python3 page/build_page.py data/map.json data/twin.json   # bakes the data into index.html
-
-To use another model, change EMBED_MODEL and JUDGE_MODEL to any Ollama model. To use a hosted API instead,
-replace the two functions embed() and judge(): everything else stays the same.
 
 Setup: Ollama running, `ollama pull embeddinggemma`, `ollama pull gemma3:4b`, `pip install numpy scikit-learn`.
 """
 import json
+import re
 import os
 import sys
+import time
+import urllib.error
 import urllib.request
 from collections import Counter
 
@@ -26,11 +27,11 @@ from sklearn.manifold import TSNE
 
 from larkhob_data import STEPS, NEEDS, NEED_LENS, STEP_TYPE, CATS, ACC, STEP_QUESTIONS, OVERRIDES
 
+HERE = os.path.dirname(os.path.abspath(__file__))
 OLLAMA = "http://localhost:11434"
 EMBED_MODEL = "embeddinggemma"
 JUDGE_MODEL = "gemma3:4b"
 SHORTLIST = 5
-HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, "..", "data", "map.json")
 CACHE = os.path.join(HERE, "judge_cache.json")
 
@@ -46,6 +47,46 @@ def post(path, body, timeout=600):
                  % (path, e, EMBED_MODEL, JUDGE_MODEL))
 
 
+def arg(name, default=None):
+    """Value after a command-line flag, e.g. --model x."""
+    return sys.argv[sys.argv.index(name) + 1] if name in sys.argv[:-1] else default
+
+
+JUDGE_VIA = arg("--judge", "ollama")          # ollama | openrouter
+if JUDGE_VIA == "openrouter":
+    JUDGE_MODEL = arg("--model") or sys.exit("With --judge openrouter, give a model id: --model vendor/model:free")
+OPENROUTER = "https://openrouter.ai/api/v1/chat/completions"
+
+
+def chat(prompt, schema, name):
+    """Send one prompt to the judge and return its JSON text. Same prompt and schema for both routes."""
+    if JUDGE_VIA == "ollama":
+        r = post("/api/chat", {"model": JUDGE_MODEL, "stream": False, "format": schema, "options": {"temperature": 0},
+                               "messages": [{"role": "user", "content": prompt}]})
+        return r["message"]["content"]
+    key = os.environ.get("OPENROUTER_API_KEY") or sys.exit("Set OPENROUTER_API_KEY first.")
+    body = {"model": JUDGE_MODEL, "temperature": 0, "messages": [{"role": "user", "content": prompt}],
+            "response_format": {"type": "json_schema", "json_schema": {"name": name, "strict": True, "schema": schema}},
+            "provider": {"require_parameters": True}}
+    for wait in (0, 20, 60):
+        time.sleep(wait)
+        req = urllib.request.Request(OPENROUTER, data=json.dumps(body).encode(),
+                                     headers={"Content-Type": "application/json", "Authorization": "Bearer " + key})
+        try:
+            with urllib.request.urlopen(req, timeout=300) as r:
+                msg = json.load(r)["choices"][0]["message"]
+                if not msg.get("content"):
+                    raise RuntimeError("empty content; message keys: %s" % list(msg))
+                return msg["content"]
+        except urllib.error.HTTPError as e:
+            msg = e.read().decode()[:300]
+            if e.code == 429:
+                print("  rate limited (429), waiting... %s" % msg)
+                continue
+            raise RuntimeError("OpenRouter %s: %s" % (e.code, msg))
+    raise RuntimeError("OpenRouter: still rate limited. The free plan allows about 50 requests a day.")
+
+
 def embed(texts, label):
     vecs = []
     for i in range(0, len(texts), 16):
@@ -55,40 +96,74 @@ def embed(texts, label):
     return v / np.linalg.norm(v, axis=1, keepdims=True)
 
 
-JUDGE_VERSION = "strict-2"
+JUDGE_VERSION = "strict-4-evidence"
 JUDGE_SCHEMA = {
     "type": "object",
     "properties": {
         "customer_needs_to_know": {"type": "string"},
         "best_step": {"type": "integer", "minimum": 0, "maximum": SHORTLIST},
         "what_that_step_gives": {"type": "string"},
+        "evidence": {"type": "string"},
         "verdict": {"type": "string", "enum": ["answers", "partly", "none"]},
         "reason": {"type": "string"},
         "missing_step": {"type": "string"},
     },
-    "required": ["customer_needs_to_know", "best_step", "what_that_step_gives", "verdict", "reason", "missing_step"],
+    "required": ["customer_needs_to_know", "best_step", "what_that_step_gives", "evidence", "verdict", "reason", "missing_step"],
 }
 
 EXAMPLES = """Examples from other shops (not Larkhob):
 
 Need: "Will this rug's colour run if I wash it at 40 degrees?"
-Steps: 1. Clean and care: Clean it and look after it so it lasts. 2. Check size and weight: Check the size, weight and what it is made of.
+Steps: 1. Clean and care: Clean it and look after it so it lasts. Questions it answers: How do I wash it? 2. Check materials and safety: Check what it is made of.
 customer_needs_to_know: whether the dye is colourfast at 40 degrees.
 best_step: 1. what_that_step_gives: washing and care instructions, which normally state the safe temperature.
-verdict: answers. missing_step: ""
+evidence: "How do I wash it?". verdict: answers. missing_step: ""
 
 Need: "I'm 1.95 m tall. Will this bike frame fit me, and can I test ride it?"
 Steps: 1. Check size and weight: Check the size and dimensions. 2. Ask before buying: Ask the shop a question.
 customer_needs_to_know: which frame size suits their height, and whether a test ride is possible.
 best_step: 1. what_that_step_gives: frame dimensions, but not a size guide by height and nothing about test rides.
-verdict: partly. missing_step: "Find my size and try it"
+evidence: "Check the size and dimensions". verdict: partly. missing_step: "Find my size and try it"
 
 Need: "I use a wheelchair. Can I reach the controls on this sofa's recliner from a seated transfer?"
 Steps: 1. Check size and weight: Check the size and dimensions. 2. Learn to use it: Learn how to use it from instructions.
 customer_needs_to_know: whether the controls are reachable and usable for someone transferring from a wheelchair.
 best_step: 0. what_that_step_gives: dimensions and operating instructions, which say nothing about reach or use from a wheelchair.
-verdict: none. missing_step: "Check it works for my body"
+evidence: "". verdict: none. missing_step: "Check it works for my body"
 """
+
+
+CONTACT_STEPS = {"Ask before buying", "Get help"}
+
+
+def evidence_ok(evidence, step):
+    """The quoted evidence must come from the step's own text: most of its content words must appear there."""
+    words = [w for w in "".join(c if c.isalnum() else " " for c in evidence.lower()).split() if len(w) > 3]
+    if not words:
+        return False
+    text = (step[1] + " " + step[2] + " " + STEP_QUESTIONS[step[1]]).lower()
+    return sum(w in text for w in words) / len(words) >= 0.6
+
+
+PROMPT = arg("--prompt", "strict-2")      # strict-2 (default: tested best, 26 Nov 2026) | strict-4 (extra rules; tested worse)
+if PROMPT not in ("strict-2", "strict-4"):
+    sys.exit("--prompt must be strict-2 or strict-4")
+if PROMPT == "strict-2":
+    JUDGE_VERSION = "strict-2"
+STRICT4_RULES = (
+    "Being able to ask the shop or contact customer service is not an answer: \"Ask before buying\" and \"Get help\" "
+    "can only partly answer a need.\n"
+    "If the need names a specific detail (a body or health condition, a number, a person it is for, a comparison over "
+    "time), the step answers only if it covers that detail, not just the topic.\n"
+    "evidence: copy the exact words from the chosen step's text or questions that give the customer what they need. "
+    "If no words do, the verdict cannot be \"answers\".\n\n")
+
+
+def examples():
+    """strict-2 had no evidence lines in its examples."""
+    if PROMPT == "strict-4":
+        return EXAMPLES
+    return re.sub(r"evidence: .*?\. (?=verdict:)", "", EXAMPLES)
 
 
 def judge(need, options):
@@ -103,32 +178,39 @@ def judge(need, options):
         "- \"partly\": a step gives some of it, but an important part of the question is left open.\n"
         "- \"none\": no step gives them what they need. best_step is 0.\n"
         "Needs about disability, access, a specific body or health condition, rules and laws, or safety are rarely "
-        "answered by a general step: check carefully.\n\n"
+        "answered by a general step: check carefully.\n"
+        + (STRICT4_RULES if PROMPT == "strict-4" else "\n") + (
         "%s\n"
         "Now the real case.\nNeed: \"%s\"\nSteps:\n%s\n\n"
         "Fill every field in order. customer_needs_to_know: the specific thing they must find out or do. "
         "what_that_step_gives: what the best step would actually tell or let them do. reason: one plain sentence "
         "under 25 words. missing_step: if the verdict is not \"answers\", the step the journey is missing in 2 to 6 "
         "words, written as a customer action; otherwise an empty string."
-        % (EXAMPLES, need, listing))
+        % (examples(), need, listing)))
+    err = "no answer"
     for attempt in range(2):
-        r = post("/api/chat", {"model": JUDGE_MODEL, "stream": False, "format": JUDGE_SCHEMA,
-                               "options": {"temperature": 0},
-                               "messages": [{"role": "user", "content": prompt}]})
         try:
-            out = json.loads(r["message"]["content"])
+            out = json.loads(chat(prompt, JUDGE_SCHEMA, "verdict"))
             v, k = out["verdict"], int(out["best_step"])
             if v in ("answers", "partly", "none") and 0 <= k <= len(options):
                 if v != "none" and k == 0:
                     v = "none"
                 if v == "none":
                     k = 0
-                return {"verdict": v, "step": k, "reason": out["reason"], "missing_step": out["missing_step"],
+                flag = ""
+                if v == "answers" and PROMPT == "strict-4":
+                    s = options[k - 1]
+                    if s[1] in CONTACT_STEPS:
+                        v, flag = "partly", "contact step"
+                    elif not evidence_ok(out.get("evidence", ""), s):
+                        v, flag = "partly", "no evidence in step"
+                return {"flag": flag, "evidence": out.get("evidence", ""), "verdict": v, "step": k, "reason": out["reason"], "missing_step": out["missing_step"],
                         "needs_to_know": out["customer_needs_to_know"], "step_gives": out["what_that_step_gives"]}
-        except Exception:
-            pass
+        except Exception as e:
+            err = "%s: %s" % (type(e).__name__, str(e)[:300])
+    print("  judge failed: %s" % err)
     return {"verdict": "none", "step": 0, "reason": "The judge could not decide.", "missing_step": "",
-            "needs_to_know": "", "step_gives": ""}
+            "needs_to_know": "", "step_gives": "", "error": err}
 
 
 FRAG_VERSION = "frag-1"
@@ -155,10 +237,9 @@ def fragments(need, main, others):
         "return an empty list.\ntogether: if the customer used the main step and the listed steps together, would "
         "the need be answered (\"answers\"), still partly (\"partly\"), or not (\"none\")? With an empty list, "
         "together is \"partly\"." % (need, main[1], main[2], listing))
-    r = post("/api/chat", {"model": JUDGE_MODEL, "stream": False, "format": FRAG_SCHEMA, "options": {"temperature": 0},
-                           "messages": [{"role": "user", "content": prompt}]})
+    content = chat(prompt, FRAG_SCHEMA, "fragments")
     try:
-        out = json.loads(r["message"]["content"])
+        out = json.loads(content)
         idx = sorted({int(p["step"]) - 1 for p in out.get("parts", [])
                       if 1 <= int(p["step"]) <= len(others) and p.get("part", "").strip()})
         tog = out.get("together") if idx else "partly"
@@ -193,19 +274,41 @@ def main():
     cache = {}
     if os.path.exists(CACHE) and not dry:
         cache = json.load(open(CACHE))
+    only = None
+    if "--only-holdout" in sys.argv:
+        gold = json.load(open(os.path.join(HERE, "gold_labels.json")))
+        only = {g["need"] for g in gold["holdout"]}
+        missing = only - set(need_texts)
+        if missing:
+            sys.exit("%d held-out needs are not in larkhob_data.py; was a need reworded?" % len(missing))
     verdicts = []
+    fails = 0
     print("Judging %d needs with %s..." % (n_needs, JUDGE_MODEL))
     for i, text in enumerate(need_texts):
+        if only is not None and text not in only:
+            verdicts.append(None)
+            continue
+        if only is None and i in OVERRIDES:
+            verdicts.append({"verdict": "none", "step": 0, "reason": "", "missing_step": "",
+                             "needs_to_know": "", "step_gives": ""})
+            continue
         opts = [STEPS[j] for j in shortlist[i]]
-        key = JUDGE_VERSION + "||" + text + "||" + "|".join(s[1] for s in opts)
+        key = JUDGE_VERSION + "|" + JUDGE_MODEL + "||" + text + "||" + "|".join(s[1] for s in opts)
         if dry:
             v = {"verdict": ["answers", "partly", "none"][i % 3], "step": 0 if i % 3 == 2 else 1,
                  "reason": "Fake judge.", "missing_step": "" if i % 3 == 0 else "Check it works for me"}
-        elif key in cache:
+        elif key in cache and not cache[key].get("error") and cache[key].get("reason") != "The judge could not decide.":
             v = cache[key]
         else:
             v = judge(text, opts)
-            cache[key] = v
+            if v.get("error"):
+                fails += 1
+                if fails >= 3:
+                    json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
+                    sys.exit("Stopped: the judge failed 3 times in a row (errors above). Failures were not saved.")
+            else:
+                fails = 0
+                cache[key] = v
             if (i + 1) % 10 == 0:
                 json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
         verdicts.append(v)
@@ -213,6 +316,24 @@ def main():
             print("  judged %d of %d" % (i + 1, n_needs))
     if not dry:
         json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
+    failed = sum(1 for v in verdicts if v and v.get("error"))
+    if failed:
+        sys.exit("%d needs could not be judged (errors above). Their answers were not saved; run the same command "
+                 "again (tomorrow, if the daily limit was reached) and it will continue where it stopped." % failed)
+    if only is not None:
+        res = {"model": "%s + %s (%s)" % (EMBED_MODEL, JUDGE_MODEL, JUDGE_VIA), "judge_version": JUDGE_VERSION,
+               "steps": [{"t": s[1]} for s in STEPS], "needs": []}
+        for i, v in enumerate(verdicts):
+            if v is None:
+                continue
+            step = int(shortlist[i][int(v["step"]) - 1]) if v["verdict"] != "none" else 0
+            res["needs"].append({"t": need_texts[i], "verdict": v["verdict"], "step": step, "by": "model",
+                                 "reason": v.get("reason", ""), "evidence": v.get("evidence", ""),
+                                 "flag": v.get("flag", ""), "missing": v.get("missing_step", "")})
+        path = os.path.join(HERE, "holdout_run.json")
+        json.dump(res, open(path, "w"), ensure_ascii=False, indent=1)
+        sys.exit("Held-out needs judged: %d. Wrote %s\nNext: python3 pipeline/eval_judge.py pipeline/holdout_run.json"
+                 % (len(res["needs"]), path))
 
     # Second pass: for needs a step only partly answers, check whether other shortlisted steps fill the gap
     frag = {}
@@ -223,9 +344,15 @@ def main():
                 continue
             main_j = int(shortlist[i][int(v["step"]) - 1])
             other_j = [int(j) for j in shortlist[i] if int(j) != main_j]
-            key = FRAG_VERSION + "||" + text + "||" + STEPS[main_j][1] + "||" + "|".join(STEPS[j][1] for j in other_j)
+            key = (FRAG_VERSION + "|" + JUDGE_MODEL + "||" + text + "||" + STEPS[main_j][1] + "||"
+                   + "|".join(STEPS[j][1] for j in other_j))
             if key not in cache:
-                cache[key] = fragments(text, STEPS[main_j], [STEPS[j] for j in other_j])
+                try:
+                    cache[key] = fragments(text, STEPS[main_j], [STEPS[j] for j in other_j])
+                except RuntimeError as e:
+                    json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
+                    sys.exit("Second pass stopped: %s\nProgress is saved; run the same command again to continue." % e)
+                json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
             f = cache[key]
             frag[i] = {"also": [other_j[k] for k in f["also"]], "fragmented": bool(f["also"]) and f["together"] == "answers"}
         json.dump(cache, open(CACHE, "w"), ensure_ascii=False)
@@ -237,7 +364,7 @@ def main():
     xyz = np.clip(xyz / np.percentile(np.abs(xyz), 97), -1.1, 1.1)
 
     titles = [s[1] for s in STEPS]
-    out = {"model": "dry-run" if dry else "%s + %s" % (EMBED_MODEL, JUDGE_MODEL),
+    out = {"model": "dry-run" if dry else "%s + %s (%s)" % (EMBED_MODEL, JUDGE_MODEL, JUDGE_VIA),
            "needs": [], "steps": [], "missing": []}
     for i, (stage, text) in enumerate(NEEDS):
         shop, ai, tier, dg, src = NEED_LENS[i].split()
@@ -251,6 +378,7 @@ def main():
                "verdict": v["verdict"], "gap": v["verdict"] == "none", "partly": v["verdict"] == "partly",
                "reason": v["reason"].strip(), "missing": v["missing_step"].strip() if v["verdict"] != "answers" else "",
                "needs_to_know": v.get("needs_to_know", ""), "step_gives": v.get("step_gives", ""),
+               "evidence": v.get("evidence", ""), "flag": v.get("flag", ""),
                "also": frag.get(i, {}).get("also", []), "fragmented": frag.get(i, {}).get("fragmented", False),
                "by": "model",
                "shop": shop, "ai": ai, "tier": tier, "dg": dg, "src": src, "cat": CATS[i], "acc": ACC[i]}
@@ -280,7 +408,7 @@ def main():
         else:
             M = embed(["task: clustering | query: " + m for _, m in miss], "missing steps")
         labels = AgglomerativeClustering(n_clusters=None, metric="cosine", linkage="average",
-                                         distance_threshold=0.35).fit_predict(M)
+                                         distance_threshold=0.10).fit_predict(M)  # 0.35 merged nearly all of a large model's specific names into one group
         for g in sorted(set(labels)):
             idx = [k for k in range(len(miss)) if labels[k] == g]
             centre = M[idx].mean(0)

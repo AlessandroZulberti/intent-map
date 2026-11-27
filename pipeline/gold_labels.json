@@ -1,0 +1,714 @@
+{
+ "note": "Gold labels for checking the judge. dev: 61 needs used to find problems and design fixes (verdicts by Claude, steps by Alessandro where he named an existing step). holdout: 40 needs labelled blind by Claude before any fix, used only to test. Not independent coders: Alessandro designed the blueprint, Claude is a model. holdout_reviewed: holdout with the 20 Claude/Nemotron (strict-2) disagreements settled by Alessandro on 26 Nov 2026, blind to which label was whose; he saw both labels, so this set leans towards one of the two and is reported next to holdout, never instead of it.",
+ "dev": [
+  {
+   "need": "I'm moving into my first flat with an induction hob. Which pans do I actually need to start with, and which can wait?",
+   "verdict": "partly",
+   "step": "Work out what I actually need"
+  },
+  {
+   "need": "Is this frying pan's coating PTFE-free? I've read worrying things about non-stick and I don't know what to believe.",
+   "verdict": "partly",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "Will the casserole fit in a standard oven with the lid on? I need the height including the knob.",
+   "verdict": "partly",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "Does the copper set work on induction, or do I need a separate disc?",
+   "verdict": "answers",
+   "step": "Check it fits what I own"
+  },
+  {
+   "need": "Is a tri-ply stainless pan really better than aluminium for someone who cooks every night?",
+   "verdict": "partly",
+   "step": "Compare options"
+  },
+  {
+   "need": "How heavy is the cast-iron casserole when it's full? I have weak wrists.",
+   "verdict": "partly",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "Which pans can go from the hob straight into a 250 degree oven?",
+   "verdict": "partly",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "I want my first espresso machine. I drink two flat whites a day and I've never steamed milk.",
+   "verdict": "partly",
+   "step": "Work out what I actually need"
+  },
+  {
+   "need": "Which grinder works with this machine for both espresso and filter?",
+   "verdict": "answers",
+   "step": "Check it fits what I own"
+  },
+  {
+   "need": "We live in a hard water area. Will the machine scale up quickly, and does it have a filter?",
+   "verdict": "partly",
+   "step": "Ask before buying"
+  },
+  {
+   "need": "How loud is the grinder at six in the morning in a small flat?",
+   "verdict": "partly",
+   "step": "Read reviews"
+  },
+  {
+   "need": "How much electricity does the machine use if I leave it on standby?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Is there a kettle that heats water to the right temperature for green tea?",
+   "verdict": "answers",
+   "step": "Search for it"
+  },
+  {
+   "need": "Do I need a water filter jug as well, or does the machine's own filter do the job?",
+   "verdict": "partly",
+   "step": "Ask before buying"
+  },
+  {
+   "need": "Can the food processor make bread dough, or will it struggle?",
+   "verdict": "partly",
+   "step": "Read reviews"
+  },
+  {
+   "need": "Is the blender jug BPA-free?",
+   "verdict": "answers",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "My mum has early dementia. Is there a kettle or toaster that switches itself off?",
+   "verdict": "partly",
+   "step": "Search for it"
+  },
+  {
+   "need": "Which descaler is safe for this espresso machine? I don't want to void the warranty.",
+   "verdict": "partly",
+   "step": "Service and maintain"
+  },
+  {
+   "need": "Do I need a special cleaner for copper, or will lemon and salt do?",
+   "verdict": "answers",
+   "step": "Clean and care"
+  },
+  {
+   "need": "Is there a subscription for descaler and filters so I never run out?",
+   "verdict": "partly",
+   "step": "Reorder"
+  },
+  {
+   "need": "What are people buying as kitchen presents this Christmas?",
+   "verdict": "answers",
+   "step": "See what is new and popular"
+  },
+  {
+   "need": "I love the green enamel colour. What else comes in it?",
+   "verdict": "answers",
+   "step": "Search for it"
+  },
+  {
+   "need": "Something nice for a friend's new kitchen. No idea what yet.",
+   "verdict": "answers",
+   "step": "Find a gift"
+  },
+  {
+   "need": "Is the sale price on the casserole actually lower than usual?",
+   "verdict": "partly",
+   "step": "Check price and offers"
+  },
+  {
+   "need": "Anything in the sale under thirty pounds that makes a decent present?",
+   "verdict": "answers",
+   "step": "Find a gift"
+  },
+  {
+   "need": "Is there a cheaper pan that does the same job? I don't need the copper finish.",
+   "verdict": "answers",
+   "step": "Compare options"
+  },
+  {
+   "need": "How long will it last? I want to buy one good set rather than replace cheap pans every two years.",
+   "verdict": "partly",
+   "step": "Read reviews"
+  },
+  {
+   "need": "Where is the cookware made and under what conditions?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Can these be repaired if they break, or do they go in the bin?",
+   "verdict": "partly",
+   "step": "ask before buying"
+  },
+  {
+   "need": "Are the reviews from people who used it for months, or just from unboxing it?",
+   "verdict": "partly",
+   "step": "Read reviews"
+  },
+  {
+   "need": "Can I see the pan in a shop before I buy? The weight matters to me.",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Can I see what the engraving on the chopping board will look like before I pay?",
+   "verdict": "partly",
+   "step": "Add engraving"
+  },
+  {
+   "need": "The checkout timed out while I was looking for my card. Do I have to start again?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Why is the delivery charge only shown at the last step?",
+   "verdict": "answers",
+   "step": "Check delivery before committing"
+  },
+  {
+   "need": "I'm ordering for our café. Can I get a VAT invoice with the business name?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "The address form won't accept my flat number.",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Which delivery option is cheapest and still arrives before the weekend?",
+   "verdict": "answers",
+   "step": "Choose delivery speed"
+  },
+  {
+   "need": "I use voice control and the pay button doesn't respond to its name.",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Can I collect from a shop instead of having a heavy box left on the doorstep?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "I want the casserole sent to my sister and the rest to me.",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Is my card saved securely or do I enter it every time?",
+   "verdict": "partly",
+   "step": "Pay"
+  },
+  {
+   "need": "The parcel says delivered but nothing arrived.",
+   "verdict": "answers",
+   "step": "Get help"
+  },
+  {
+   "need": "The non-stick coating is wearing off after three months. Am I using the wrong utensils?",
+   "verdict": "answers",
+   "step": "Find out what went wrong"
+  },
+  {
+   "need": "How do I descale the machine without damaging it?",
+   "verdict": "answers",
+   "step": "Service and maintain"
+  },
+  {
+   "need": "The blender jug has cracked. Can I buy just the jug?",
+   "verdict": "answers",
+   "step": "Buy spares"
+  },
+  {
+   "need": "The machine shows an error light I can't find in the manual.",
+   "verdict": "answers",
+   "step": "Get help"
+  },
+  {
+   "need": "It's not what I expected from the photos. How do I send it back and how long does the refund take?",
+   "verdict": "answers",
+   "step": "Return for a refund"
+  },
+  {
+   "need": "The kettle lid hinge has snapped. Is that covered?",
+   "verdict": "answers",
+   "step": "Repair under warranty"
+  },
+  {
+   "need": "I want the same machine for my brother. I can't remember which model it was.",
+   "verdict": "answers",
+   "step": "Reorder"
+  },
+  {
+   "need": "The manual PDF doesn't work with my screen reader.",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Is the 14-day return period from when I ordered or when it arrived?",
+   "verdict": "answers",
+   "step": "Return for a refund"
+  },
+  {
+   "need": "I want to register the mixer so I hear about recalls, without signing up to marketing.",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Can I use metal utensils on the stainless pans, or will they scratch?",
+   "verdict": "answers",
+   "step": "Clean and care"
+  },
+  {
+   "need": "The milk frother is leaving a film. How do I clean it properly?",
+   "verdict": "answers",
+   "step": "Clean and care"
+  },
+  {
+   "need": "Which cleaner gets burnt-on grease off the bottom of a stainless pan?",
+   "verdict": "answers",
+   "step": "Clean and care"
+  },
+  {
+   "need": "Can I use oat milk in the frother, or will it damage it?",
+   "verdict": "partly",
+   "step": "Learn to use it"
+  },
+  {
+   "need": "Is it normal for the stainless pan to have rainbow marks?",
+   "verdict": "answers",
+   "step": "Find out what went wrong"
+  },
+  {
+   "need": "Do you sell a replacement gasket for the pressure cooker?",
+   "verdict": "answers",
+   "step": "Buy spares"
+  },
+  {
+   "need": "Is the Larkhob shop step-free, and is there somewhere to sit while I wait?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "I'm deaf. Can I contact customer service by chat or text instead of phone?",
+   "verdict": "partly",
+   "step": "Get help"
+  },
+  {
+   "need": "Can I get the care instructions in large print or as audio?",
+   "verdict": "none",
+   "step": ""
+  }
+ ],
+ "holdout": [
+  {
+   "need": "I want one good pan that does eggs in the morning and a stir-fry at night.",
+   "verdict": "partly",
+   "step": "Work out what I actually need"
+  },
+  {
+   "need": "Do the handles get hot after twenty minutes on the hob?",
+   "verdict": "partly",
+   "step": "Check materials and safety"
+  },
+  {
+   "need": "Is the hand-hammered copper range worth three times the price of the stainless one, or is it just for show?",
+   "verdict": "partly",
+   "step": "Compare options"
+  },
+  {
+   "need": "I'm blind. Can I use this coffee machine without reading the display?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "I have arthritis. I need a kettle I can fill, lift and pour without much grip.",
+   "verdict": "partly",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "What's the real difference between the two espresso machines apart from the steam wand?",
+   "verdict": "answers",
+   "step": "Compare options"
+  },
+  {
+   "need": "Will the blender crush ice for smoothies, or only soft fruit?",
+   "verdict": "partly",
+   "step": "Compare options"
+  },
+  {
+   "need": "Is the toaster wide enough for sourdough slices?",
+   "verdict": "answers",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "Which food processor is easy to clean for someone who hates washing up?",
+   "verdict": "partly",
+   "step": "Read reviews"
+  },
+  {
+   "need": "Will the stand mixer fit under my wall cupboards? I have 45 centimetres of clearance.",
+   "verdict": "answers",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "I need a toaster that is easy to see and use with low vision: big buttons, high contrast.",
+   "verdict": "partly",
+   "step": "Search for it"
+  },
+  {
+   "need": "Are the replacement filters still sold for last year's kettle?",
+   "verdict": "answers",
+   "step": "Buy spares"
+  },
+  {
+   "need": "I need a wedding present from their list, under a hundred pounds, that will still be in their kitchen in ten years.",
+   "verdict": "partly",
+   "step": "Find a gift"
+  },
+  {
+   "need": "My dad has just retired and wants to learn to cook. Where do I even start?",
+   "verdict": "partly",
+   "step": "Work out what I actually need"
+  },
+  {
+   "need": "What's new this season? Nothing in mind, just looking.",
+   "verdict": "answers",
+   "step": "See what is new and popular"
+  },
+  {
+   "need": "Is there a bundle that works out cheaper than the machine and grinder separately?",
+   "verdict": "answers",
+   "step": "Check price and offers"
+  },
+  {
+   "need": "Will it arrive before Saturday if I order today?",
+   "verdict": "answers",
+   "step": "Check delivery before committing"
+  },
+  {
+   "need": "Can I return a gift if they already have one, without them seeing the price?",
+   "verdict": "partly",
+   "step": "Return for a refund"
+  },
+  {
+   "need": "Can I talk to someone who knows the products? I don't know what I need.",
+   "verdict": "partly",
+   "step": "Ask before buying"
+  },
+  {
+   "need": "The green colour is out of stock in this size. Will it come back?",
+   "verdict": "partly",
+   "step": "Choose a variant"
+  },
+  {
+   "need": "I want to send it straight to the couple with a gift note and no price inside.",
+   "verdict": "partly",
+   "step": "Enter the address"
+  },
+  {
+   "need": "My discount code says it's invalid but the email says it runs until Sunday.",
+   "verdict": "partly",
+   "step": "Use a discount code"
+  },
+  {
+   "need": "Can I pay for the espresso machine in instalments without a credit check?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Can I change the pan size after I've placed the order?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "The error message says something is wrong but not which field.",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "How do I set up the grinder? The instructions are only pictures.",
+   "verdict": "partly",
+   "step": "Unbox and set up"
+  },
+  {
+   "need": "My cast-iron pan has gone rusty after the dishwasher. Can I save it?",
+   "verdict": "answers",
+   "step": "Fix damage myself"
+  },
+  {
+   "need": "My espresso tastes sour. Is it the beans, the grind or the machine?",
+   "verdict": "answers",
+   "step": "Find out what went wrong"
+  },
+  {
+   "need": "The enamel on the casserole has chipped. Is it still safe to cook in?",
+   "verdict": "partly",
+   "step": "Find out what went wrong"
+  },
+  {
+   "need": "My grandmother left me her copper pans. Can they be re-tinned, and what would it cost?",
+   "verdict": "answers",
+   "step": "Restore or value something old"
+  },
+  {
+   "need": "Time to reorder the water filters. Same ones as last time.",
+   "verdict": "answers",
+   "step": "Reorder"
+  },
+  {
+   "need": "I lost the receipt. Is the guarantee still valid?",
+   "verdict": "partly",
+   "step": "Repair under warranty"
+  },
+  {
+   "need": "How do I dispose of an old toaster safely? Can it go in the bin?",
+   "verdict": "answers",
+   "step": "Recycle it"
+  },
+  {
+   "need": "I'm selling my copper set second-hand. How do I prove it's genuine?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "The return label needs a printer and I don't have one.",
+   "verdict": "partly",
+   "step": "Return for a refund"
+  },
+  {
+   "need": "My son wants to learn proper latte art. Is there a beginner's guide?",
+   "verdict": "partly",
+   "step": "Learn to use it"
+  },
+  {
+   "need": "How often should I season the cast-iron pan, and with what oil?",
+   "verdict": "answers",
+   "step": "Service and maintain"
+  },
+  {
+   "need": "The food processor has started smelling of burning. Is it safe to use?",
+   "verdict": "answers",
+   "step": "Find out what went wrong"
+  },
+  {
+   "need": "The product photos have no descriptions, so my screen reader just says 'image'. What does the kettle look like?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "The delivery driver only rings once and I can't get to the door quickly. Can they wait or leave it with a neighbour?",
+   "verdict": "none",
+   "step": ""
+  }
+ ],
+ "holdout_reviewed": [
+  {
+   "need": "I want one good pan that does eggs in the morning and a stir-fry at night.",
+   "verdict": "partly",
+   "step": "Work out what I actually need"
+  },
+  {
+   "need": "Do the handles get hot after twenty minutes on the hob?",
+   "verdict": "partly",
+   "step": "Check materials and safety"
+  },
+  {
+   "need": "Is the hand-hammered copper range worth three times the price of the stainless one, or is it just for show?",
+   "verdict": "partly",
+   "step": "Compare options"
+  },
+  {
+   "need": "I'm blind. Can I use this coffee machine without reading the display?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "I have arthritis. I need a kettle I can fill, lift and pour without much grip.",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "What's the real difference between the two espresso machines apart from the steam wand?",
+   "verdict": "answers",
+   "step": "Compare options"
+  },
+  {
+   "need": "Will the blender crush ice for smoothies, or only soft fruit?",
+   "verdict": "partly",
+   "step": "Compare options"
+  },
+  {
+   "need": "Is the toaster wide enough for sourdough slices?",
+   "verdict": "partly",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "Which food processor is easy to clean for someone who hates washing up?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Will the stand mixer fit under my wall cupboards? I have 45 centimetres of clearance.",
+   "verdict": "answers",
+   "step": "Check size and weight"
+  },
+  {
+   "need": "I need a toaster that is easy to see and use with low vision: big buttons, high contrast.",
+   "verdict": "partly",
+   "step": "Search for it"
+  },
+  {
+   "need": "Are the replacement filters still sold for last year's kettle?",
+   "verdict": "answers",
+   "step": "Buy spares"
+  },
+  {
+   "need": "I need a wedding present from their list, under a hundred pounds, that will still be in their kitchen in ten years.",
+   "verdict": "partly",
+   "step": "Find a gift"
+  },
+  {
+   "need": "My dad has just retired and wants to learn to cook. Where do I even start?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "What's new this season? Nothing in mind, just looking.",
+   "verdict": "answers",
+   "step": "See what is new and popular"
+  },
+  {
+   "need": "Is there a bundle that works out cheaper than the machine and grinder separately?",
+   "verdict": "answers",
+   "step": "Check price and offers"
+  },
+  {
+   "need": "Will it arrive before Saturday if I order today?",
+   "verdict": "answers",
+   "step": "Check delivery before committing"
+  },
+  {
+   "need": "Can I return a gift if they already have one, without them seeing the price?",
+   "verdict": "partly",
+   "step": "Return for a refund"
+  },
+  {
+   "need": "Can I talk to someone who knows the products? I don't know what I need.",
+   "verdict": "partly",
+   "step": "Ask before buying"
+  },
+  {
+   "need": "The green colour is out of stock in this size. Will it come back?",
+   "verdict": "partly",
+   "step": "Choose a variant"
+  },
+  {
+   "need": "I want to send it straight to the couple with a gift note and no price inside.",
+   "verdict": "partly",
+   "step": "Enter the address"
+  },
+  {
+   "need": "My discount code says it's invalid but the email says it runs until Sunday.",
+   "verdict": "partly",
+   "step": "Use a discount code"
+  },
+  {
+   "need": "Can I pay for the espresso machine in instalments without a credit check?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "Can I change the pan size after I've placed the order?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "The error message says something is wrong but not which field.",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "How do I set up the grinder? The instructions are only pictures.",
+   "verdict": "partly",
+   "step": "Unbox and set up"
+  },
+  {
+   "need": "My cast-iron pan has gone rusty after the dishwasher. Can I save it?",
+   "verdict": "answers",
+   "step": "Fix damage myself"
+  },
+  {
+   "need": "My espresso tastes sour. Is it the beans, the grind or the machine?",
+   "verdict": "answers",
+   "step": "Find out what went wrong"
+  },
+  {
+   "need": "The enamel on the casserole has chipped. Is it still safe to cook in?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "My grandmother left me her copper pans. Can they be re-tinned, and what would it cost?",
+   "verdict": "answers",
+   "step": "Restore or value something old"
+  },
+  {
+   "need": "Time to reorder the water filters. Same ones as last time.",
+   "verdict": "answers",
+   "step": "Reorder"
+  },
+  {
+   "need": "I lost the receipt. Is the guarantee still valid?",
+   "verdict": "partly",
+   "step": "Repair under warranty"
+  },
+  {
+   "need": "How do I dispose of an old toaster safely? Can it go in the bin?",
+   "verdict": "answers",
+   "step": "Recycle it"
+  },
+  {
+   "need": "I'm selling my copper set second-hand. How do I prove it's genuine?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "The return label needs a printer and I don't have one.",
+   "verdict": "partly",
+   "step": "Return for a refund"
+  },
+  {
+   "need": "My son wants to learn proper latte art. Is there a beginner's guide?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "How often should I season the cast-iron pan, and with what oil?",
+   "verdict": "answers",
+   "step": "Service and maintain"
+  },
+  {
+   "need": "The food processor has started smelling of burning. Is it safe to use?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "The product photos have no descriptions, so my screen reader just says 'image'. What does the kettle look like?",
+   "verdict": "none",
+   "step": ""
+  },
+  {
+   "need": "The delivery driver only rings once and I can't get to the door quickly. Can they wait or leave it with a neighbour?",
+   "verdict": "none",
+   "step": ""
+  }
+ ]
+}
